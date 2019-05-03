@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+  >
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginHorizontal="50dp"
+        android:text="이름"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/inputName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="5dp"
+        android:hint="실명을 입력하세요"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:inputType="text"
+        android:lines="1"
+        />
+
+    <TextView
+        android:id="@+id/ID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@+id/inputName"
+        android:layout_marginTop="5dp"
+        android:text="아이디"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/checknewID"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/ID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/InputnewID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:hint="아이디"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:inputType="text"
+            android:lines="1"
+            />
+
+        <Button
+            android:id="@+id/checknewIDBT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:text="중복확인"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:background="@drawable/rectangle_yellow"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/checknewID"
+        android:layout_marginHorizontal="50dp"
+        android:text="비밀번호"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/inputnewPW"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@+id/pw"
+        android:layout_marginTop="5dp"
+        android:hint="비밀번호"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:inputType="textPassword"
+        android:lines="1"
+        />
+
+    <TextView
+        android:id="@+id/checkpw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/inputnewPW"
+        android:layout_marginHorizontal="50dp"
+        android:text="비밀번호 확인"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/checknewPW"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@+id/checkpw"
+        android:layout_marginTop="5dp"
+        android:hint="비밀번호 확인"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:inputType="textPassword"
+        android:lines="1"
+        />
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/checknewPW"
+        android:layout_marginHorizontal="50dp"
+        android:text="성별"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/gendercheck"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="여성"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="0.5"/>
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="남성"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/agreement"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gendercheck"
+        android:text="모두 동의합니다"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/agreement"
+        android:text="단비 시작하기"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:background="@drawable/bt_click_orange"
+        />
+
+
+</RelativeLayout>
