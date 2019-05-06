@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NoticeActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button
+            android:id="@+id/notice_bt_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="공지사항" />
+
+        <Button
+            android:id="@+id/notice_bt_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="문의사항" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/notice_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/notice_detail_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:padding="60dp"
+        >
+        <TextView
+            android:id="@+id/notice_detail_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="클릭시 창이 닫힙니다."
+            android:layout_centerHorizontal="true"
+            android:textColor="#cccccc"
+            />
+            <TextView
+                android:id="@+id/notice_detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notice_detail_hint"
+                android:layout_marginTop="50dp"
+                android:text="제목"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/notice_detail_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내용내용내용"
+                android:textSize="16dp"
+                android:layout_below="@id/notice_detail_title"
+                android:layout_marginTop="50dp"/>
+            <TextView
+                android:id="@+id/notice_detail_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-5-5"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/notice_detail_title"/>
+
+        </RelativeLayout>
+</FrameLayout>
