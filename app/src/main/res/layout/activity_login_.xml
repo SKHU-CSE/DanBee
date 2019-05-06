@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+    
+    <EditText
+        android:id="@+id/InputId"
+        android:layout_marginTop="35dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="아이디 입력"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:inputType="text"
+        android:lines="1"
+        android:background="@drawable/rectangle_yellow"
+        android:padding="15dp"/>
+
+    <EditText
+        android:id="@+id/InputPW"
+        android:layout_below="@id/InputId"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:hint="비밀번호 입력"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:inputType="textPassword"
+        android:lines="1"
+        android:background="@drawable/rectangle_yellow"
+        android:padding="15dp"/>
+
+    <CheckBox
+        android:id="@+id/auto_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/InputPW"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="10dp"
+        android:text="로그인 상태 유지"
+        android:textSize="15sp"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/loginBT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/auto_login"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="10dp"
+        android:text="로그인"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:background="@drawable/bt_click_orange"/>
+
+
+    <LinearLayout
+        android:id="@+id/findnNew"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/loginBT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/findidpw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디 비밀번호 찾기"
+            android:textSize="15sp"
+            android:layout_weight="1.5"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:background="#ffffff"/>
+
+        <TextView
+            android:id="@+id/newMem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:layout_weight="0.2"
+            android:textSize="15sp"
+            android:gravity="right"
+            android:textColor="#000000"
+            android:background="#ffffff"/>
+    </LinearLayout>
+    
+    <view
+        android:id="@+id/view"
+        android:layout_below="@+id/findnNew"
+        android:layout_marginTop="40dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#000000"/>
+
+</RelativeLayout>
