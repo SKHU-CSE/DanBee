@@ -4,5 +4,5 @@ public class NoticeData {
     public int id;
     public String time;
     public String title;
-    public String conent;
+    public String content;
 }

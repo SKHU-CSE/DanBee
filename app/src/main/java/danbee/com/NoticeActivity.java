@@ -60,6 +60,7 @@ public class NoticeActivity extends AppCompatActivity {
                 TextView tv_detail_content = detailView.findViewById(R.id.notice_detail_content);
                 TextView tv_detail_date = detailView.findViewById(R.id.notice_detail_date);
 
+                //클릭된 아이템가져옴
                 NoticeItem item = holder.getItem(pos);
                 tv_detail_title.setText(item.getTitle());
                 tv_detail_content.setText(item.getContent());
@@ -111,7 +112,7 @@ public class NoticeActivity extends AppCompatActivity {
             if(isPageShow) {  //slide닫는 에니메이션후
                 detailView.setVisibility(View.GONE);
                 isPageShow = false;
-            }else if(!isPageShow){
+            }else {
                 isPageShow = true;
             }
         }
@@ -159,7 +160,7 @@ public class NoticeActivity extends AppCompatActivity {
 
             for(int i=0; i<datasize; i++){
                 String title = noticeResult.data.get(i).title;
-                String content = noticeResult.data.get(i).conent;
+                String content = noticeResult.data.get(i).content;
                 String date = noticeResult.data.get(i).time;
                 items.add(new NoticeItem(title,content,date));
             }
