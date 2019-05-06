@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
   >
+
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/membership_tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
@@ -15,11 +20,11 @@
         />
 
     <EditText
-        android:id="@+id/inputName"
+        android:id="@+id/membership_et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_below="@+id/name"
+        android:layout_below="@+id/membership_tv_name"
         android:layout_marginTop="5dp"
         android:hint="실명을 입력하세요"
         android:textColor="#000000"
@@ -29,11 +34,11 @@
         />
 
     <TextView
-        android:id="@+id/ID"
+        android:id="@+id/membership_tv_ID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_below="@+id/inputName"
+        android:layout_below="@+id/membership_et_name"
         android:layout_marginTop="5dp"
         android:text="아이디"
         android:textColor="#000000"
@@ -44,17 +49,17 @@
         android:id="@+id/checknewID"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/ID"
+        android:layout_below="@id/membership_tv_ID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
 
         <EditText
-            android:id="@+id/InputnewID"
+            android:id="@+id/membership_et_ID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
+            android:layout_below="@+id/membership_tv_name"
             android:hint="아이디"
             android:layout_weight="0.5"
             android:gravity="left"
@@ -65,7 +70,7 @@
             />
 
         <Button
-            android:id="@+id/checknewIDBT"
+            android:id="@+id/membership_bt_checkID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -79,7 +84,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/pw"
+        android:id="@+id/membership_tv_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -91,11 +96,11 @@
         />
 
     <EditText
-        android:id="@+id/inputnewPW"
+        android:id="@+id/membership_et_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_below="@+id/pw"
+        android:layout_below="@+id/membership_tv_pw"
         android:layout_marginTop="5dp"
         android:hint="비밀번호"
         android:textColor="#000000"
@@ -105,11 +110,11 @@
         />
 
     <TextView
-        android:id="@+id/checkpw"
+        android:id="@+id/membership_tv_checkpw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/inputnewPW"
+        android:layout_below="@+id/membership_et_pw"
         android:layout_marginHorizontal="50dp"
         android:text="비밀번호 확인"
         android:textColor="#000000"
@@ -117,11 +122,11 @@
         />
 
     <EditText
-        android:id="@+id/checknewPW"
+        android:id="@+id/membership_et_checkpw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_below="@+id/checkpw"
+        android:layout_below="@+id/membership_tv_checkpw"
         android:layout_marginTop="5dp"
         android:hint="비밀번호 확인"
         android:textColor="#000000"
@@ -131,11 +136,37 @@
         />
 
     <TextView
-        android:id="@+id/gender"
+        android:id="@+id/membership_tv_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/checknewPW"
+        android:layout_below="@+id/membership_et_checkpw"
+        android:layout_marginHorizontal="50dp"
+        android:text="전화번호"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        />
+
+    <EditText
+        android:id="@+id/membership_et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@+id/membership_tv_phone"
+        android:layout_marginTop="5dp"
+        android:hint="전화번호"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:inputType="number"
+        android:lines="1"
+        />
+
+    <TextView
+        android:id="@+id/membership_tv_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/membership_et_phone"
         android:layout_marginHorizontal="50dp"
         android:text="성별"
         android:textColor="#000000"
@@ -146,31 +177,40 @@
         android:id="@+id/gendercheck"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/gender"
+        android:layout_below="@id/membership_tv_gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
 
-        <CheckBox
+        <RadioGroup
+            android:id="@+id/membership_rg_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="여성"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="0.5"/>
+            android:orientation="horizontal">
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="남성"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_weight="0.5"/>
+            <RadioButton
+                android:id="@+id/membership_rb_female"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="여성"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/membership_rb_male"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="남성"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+        </RadioGroup>
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/agreement"
+        android:id="@+id/membership_cb_agreement"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
@@ -181,11 +221,13 @@
         android:textSize="18sp" />
 
     <Button
+        android:id="@+id/membership_bt_SignUp"
+        android:enabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="40dp"
-        android:layout_below="@id/agreement"
+        android:layout_below="@id/membership_cb_agreement"
         android:text="단비 시작하기"
         android:textSize="18sp"
         android:textColor="#000000"
@@ -194,3 +236,4 @@
 
 
 </RelativeLayout>
+</ScrollView>
