@@ -16,14 +16,13 @@
         android:usesCleartextTraffic="true"
         >
         <activity android:name=".NoticeActivity"></activity>
-
-        <activity android:name=".MainActivity"></activity>
         <activity android:name=".Login_Activity" />
+        <activity android:name=".Membership_Activity" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/Client_ID" />
 
-        <activity android:name=".Membership_Activity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
