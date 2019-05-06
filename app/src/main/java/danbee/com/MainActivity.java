@@ -213,12 +213,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     void btClickIntent(int index){
+        Intent intent = null;
         switch (index){
             case 0:
 
                 break;
             case 1:
-
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
                 break;
             case 2:
 
@@ -227,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 break;
             case 4:
-                Intent intent = new Intent(this, NoticeActivity.class);
+                intent = new Intent(this, NoticeActivity.class);
                 startActivity(intent);
                 break;
             case 5:
@@ -236,6 +238,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case 6:
 
                 break;
+            default:
+                return;
         }
     }
 }

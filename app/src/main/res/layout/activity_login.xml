@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
-    
+    >
+
     <EditText
         android:id="@+id/InputId"
         android:layout_marginTop="35dp"
@@ -89,8 +90,8 @@
             android:textColor="#000000"
             android:background="#ffffff"/>
     </LinearLayout>
-    
-    <view
+
+    <View
         android:id="@+id/view"
         android:layout_below="@+id/findnNew"
         android:layout_marginTop="40dp"

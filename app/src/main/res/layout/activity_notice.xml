@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"/>
     </LinearLayout>
     <RelativeLayout
-        android:visibility="gone"
+
         android:id="@+id/notice_detail_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -72,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:text="2019-5-5"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/notice_detail_title"/>
+                android:layout_below="@id/notice_detail_title"
+                />
 
         </RelativeLayout>
 </FrameLayout>
