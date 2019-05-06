@@ -11,31 +11,45 @@ import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+
+import danbee.com.noticedata.NoticeData;
+import danbee.com.noticedata.NoticeResult;
+
 public class NoticeActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RelativeLayout detailView;
     Animation translateLeft;
     Animation translateRight;
-
+    ArrayList<NoticeItem> items = new ArrayList<NoticeItem>();
     boolean isPageShow = false;
-
+    NoticeRecyclerViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice);
         set();
 
+        //시작하면 reqestQueue가 만들어짐 Main에 넣기
+        if(AppHelper.requestQueue == null)
+            AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        sendRequest(); //통신
+
         recyclerView = findViewById(R.id.notice_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         //컨텍스트, 방향, 아이템보이는방향(위->아래, 아래->위)
         recyclerView.setLayoutManager(layoutManager);
 
-        final NoticeRecyclerViewAdapter adapter = new NoticeRecyclerViewAdapter(this);
-
-        adapter.addItem(new NoticeItem("제목","내용","2019-5-5"));
-        adapter.addItem(new NoticeItem("제목1","내용1","2019-5-5"));
-        adapter.addItem(new NoticeItem("제목2","내용2","2019-5-5"));
+        adapter = new NoticeRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
         //카드뷰클릭시 이벤트
@@ -105,6 +119,53 @@ public class NoticeActivity extends AppCompatActivity {
         @Override
         public void onAnimationRepeat(Animation animation) {
 
+        }
+    }
+
+    //서버 통신
+    void sendRequest(){
+        String url = "http://3.17.25.223/api/notice/list";
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {//응답을 문자열로받아서 넣어달라는뜻
+                    @Override
+                    public void onResponse(String response) {
+                        noticeProcessResponse(response);  // gson변환함수
+                    }
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "volley err: "+error);
+                    }
+                }
+        );
+        //자동캐싱기능이있음 이전결과가 그대로보여질수도있다.
+        request.setShouldCache(false); //이전결과가잇더라도 새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+
+    }
+
+    //json 파싱
+    public void noticeProcessResponse(String response){
+        Gson gson = new Gson();
+        NoticeResult noticeResult = gson.fromJson(response, NoticeResult.class);
+
+        if(noticeResult.result == 777){
+            int datasize = noticeResult.data.size();
+            Log.d("test", "Notice count: "+datasize);
+
+            for(int i=0; i<datasize; i++){
+                String title = noticeResult.data.get(i).title;
+                String content = noticeResult.data.get(i).conent;
+                String date = noticeResult.data.get(i).time;
+                items.add(new NoticeItem(title,content,date));
+            }
+
+            adapter.setItems(items);  //변경된 리스트로반영
+            adapter.notifyDataSetChanged();
         }
     }
 

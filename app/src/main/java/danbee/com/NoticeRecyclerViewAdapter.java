@@ -49,7 +49,7 @@ public class NoticeRecyclerViewAdapter extends RecyclerView.Adapter<NoticeRecycl
     }
 
     //데이터수정
-    public void addItems(ArrayList<NoticeItem> items){
+    public void setItems(ArrayList<NoticeItem> items){
         this.items = items;
     }
 
