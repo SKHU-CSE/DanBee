@@ -185,7 +185,10 @@ public class Membership_Activity extends AppCompatActivity {
         EditText etname = findViewById(R.id.membership_et_name);
         String name = etname.getText().toString();
 
-        if(userid.equals("") || phone.equals("") || name.equals("") || pw2.equals("") || gender == -1 ){
+        EditText etbirth = findViewById(R.id.membership_et_birth);
+        String birth = etbirth.getText().toString();
+
+        if(userid.equals("") || phone.equals("") || name.equals("") || pw2.equals("") || gender == -1 ||  birth.equals("")){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder
                     .setTitle("빈칸이 존재합니다.")
@@ -195,7 +198,7 @@ public class Membership_Activity extends AppCompatActivity {
             return;
         }
 
-        String url = "http://3.17.25.223/api/user/signup/"+userid+"/"+spw1+"/"+phone+"/"+name+"/"+gender;
+        String url = "http://3.17.25.223/api/user/signup/"+userid+"/"+spw1+"/"+phone+"/"+name+"/"+gender+"/"+birth;
 
         StringRequest request = new StringRequest(
                 Request.Method.GET,

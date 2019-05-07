@@ -43,6 +43,7 @@ public class NoticeWirte extends AppCompatActivity {
                 //진행중 표시 레이아웃
                 view = findViewById(R.id.noticewrite_progress_view);
                 view.setVisibility(View.VISIBLE);
+                view.setClickable(false);
                 ProgressBar progressBar = view.findViewById(R.id.noticewrite_progressBar);
 
                 //통신
@@ -76,6 +77,8 @@ public class NoticeWirte extends AppCompatActivity {
                     .setPositiveButton("확인",null)
                     .setCancelable(false)
                     .show();
+
+            view.setVisibility(View.GONE);
             return;
         }
 
@@ -105,6 +108,19 @@ public class NoticeWirte extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("test", "write notice err: "+error);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("전송 실패")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        view.setVisibility(View.GONE);
+                                        setResult(RESULT_OK);
+                                        finish();
+                                    }
+                                })
+                                .setCancelable(false)
+                                .show();
                     }
                 }
         );

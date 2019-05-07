@@ -85,8 +85,7 @@
         android:id="@+id/noticewrite_progress_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#aaaaaaaa"
-        android:clickable="false">
+        android:background="#aaaaaaaa">
     <ProgressBar
         android:id="@+id/noticewrite_progressBar"
         style="?android:attr/progressBarStyleLarge"

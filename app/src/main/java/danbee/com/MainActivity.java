@@ -25,6 +25,7 @@ import com.naver.maps.map.util.FusedLocationSource;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.Util;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
@@ -155,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     })
                     .normalTextColor(Color.BLACK)
                     .normalColorRes(btColorSet(i))
-                    .imagePadding(new Rect(0,0,0,30));
+                    .imagePadding(new Rect(15, 10, 15, 40));
+
             boombt.addBuilder(builder);
         }
     }
@@ -165,25 +167,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int res = -1;
         switch (pos){
             case 0:
-                res=R.drawable.danbeelogo;
+                res=R.drawable.qrcode;
                 break;
             case 1:
-                res=R.drawable.danbeelogo;
+                res=R.drawable.lock;
                 break;
             case 2:
-                res=R.drawable.danbeelogo;
+                res=R.drawable.profile;
                 break;
             case 3:
                 res=R.drawable.danbeelogo;
                 break;
             case 4:
-                res=R.drawable.noticewrite;
+                res=R.drawable.alarm;
                 break;
             case 5:
-                res=R.drawable.danbeelogo;
+                res=R.drawable.history;
                 break;
             case 6:
-                res=R.drawable.danbeelogo;
+                res=R.drawable.guidebook;
                 break;
         }
         return res;
