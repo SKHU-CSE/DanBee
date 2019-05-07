@@ -1,6 +1,7 @@
 package danbee.com;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -152,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             btClickIntent(index);
                         }
                     })
+                    .normalTextColor(Color.BLACK)
+                    .normalColorRes(btColorSet(i))
                     .imagePadding(new Rect(0,0,0,30));
             boombt.addBuilder(builder);
         }
@@ -174,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 res=R.drawable.danbeelogo;
                 break;
             case 4:
-                res=R.drawable.danbeelogo;
+                res=R.drawable.noticewrite;
                 break;
             case 5:
                 res=R.drawable.danbeelogo;
@@ -191,28 +194,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String title="";
         switch (pos){
             case 0:
-                title="QR코드";
-                break;
+                return title="QR코드";
             case 1:
-                title="로그인";
-                break;
+                return title="로그인";
             case 2:
-                title="내정보";
-                break;
+                return title="내정보";
             case 3:
-                title="";
-                break;
+                return title="";
             case 4:
-                title="공지사항/Q&A";
-                break;
+                return title="공지사항/Q&A";
             case 5:
-                title="이용내역";
-                break;
+                return title="이용내역";
             case 6:
-                title="사용방법";
-                break;
+                return title="사용방법";
+            default:
+                return title;
         }
-        return title;
     }
 
     void btClickIntent(int index){
@@ -245,4 +242,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return;
         }
     }
+
+    //버튼색 지정
+    int btColorSet(int index){
+        switch (index){
+            case 0:
+            case 6:
+                return R.color.danbeeBomButton1;
+            case 1:
+            case 5:
+                return R.color.danbeeBomButton2;
+            case 2:
+            case 4:
+                return R.color.danbeeBomButton3;
+            default:
+                return R.color.colorPrimaryDark;
+        }
+    }
+
 }

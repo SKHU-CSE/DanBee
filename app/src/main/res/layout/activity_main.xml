@@ -27,6 +27,7 @@
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb"
+        app:bmb_normalColor="#856400"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:bmb_buttonEnum="textInsideCircle"

@@ -1,6 +1,7 @@
 package danbee.com;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,9 +32,11 @@ public class NoticeActivity extends AppCompatActivity {
     RelativeLayout detailView;
     Animation translateLeft;
     Animation translateRight;
+    final int WirteSuccessCode = 777;
     ArrayList<NoticeItem> items = new ArrayList<NoticeItem>();
     boolean isPageShow = false;
     NoticeRecyclerViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +95,7 @@ public class NoticeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), NoticeWirte.class);
-                startActivity(intent);
+                startActivityForResult(intent, WirteSuccessCode);
             }
         });
 
@@ -182,4 +185,13 @@ public class NoticeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == WirteSuccessCode) {
+            if (resultCode == RESULT_OK) {  //글작성한경우만 리스트최신화
+                sendRequest();
+            }
+        }
+    }
 }
