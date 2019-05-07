@@ -1,5 +1,7 @@
 package danbee.com;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +25,11 @@ import danbee.com.signupdata.UserIdCheckResult;
 
 public class Membership_Activity extends AppCompatActivity {
 
+    Activity activity = this;
     int gender = -1;
     boolean checkidBtClick = false;
     EditText et;
+    Button signUpBt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +46,20 @@ public class Membership_Activity extends AppCompatActivity {
         checkIdBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et.getText() != null)
+                if(!et.getText().toString().equals(""))
                     checkIdRequest();
+                else{
+                    AlertDialog.Builder adbuilder = new AlertDialog.Builder(activity);
+                    adbuilder.setTitle("아이디를 입력해주세요")
+                            .setPositiveButton("확인", null)
+                            .setCancelable(false)
+                            .show();
+                }
             }
         });
 
         //가입하기버튼
-        Button signUpBt = findViewById(R.id.membership_bt_SignUp);
+        signUpBt = findViewById(R.id.membership_bt_SignUp);
         signUpBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +139,6 @@ public class Membership_Activity extends AppCompatActivity {
         UserIdCheckResult userIdCheckResult = gson.fromJson(response, UserIdCheckResult.class);
 
         if(userIdCheckResult.result == 404){ //id가 존재안함
-            findViewById(R.id.membership_bt_SignUp).setEnabled(true);
             checkidBtClick = true;
             AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
             adbuilder.setTitle("사용 가능한 아이디입니다")
@@ -136,7 +146,6 @@ public class Membership_Activity extends AppCompatActivity {
                     .setCancelable(false)
                     .show();
         }else{
-            findViewById(R.id.membership_bt_SignUp).setEnabled(false);
             AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
             adbuilder.setTitle("아이디가 존재합니다")
                     .setPositiveButton("확인", null)
@@ -207,6 +216,16 @@ public class Membership_Activity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("test", "sign: "+response);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("가입 완료")
+                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
+                                .setCancelable(false)
+                                .show();
                     }
                 },
                 new Response.ErrorListener() {
