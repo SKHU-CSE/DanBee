@@ -13,8 +13,11 @@
         android:roundIcon="@drawable/danbeelogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".LoginActivity"></activity>
+        android:usesCleartextTraffic="true"
+        android:screenOrientation="portrait"
+        >
+        <activity android:name=".NoticeWirte"></activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".NoticeActivity" />
         <activity android:name=".Membership_Activity" />
 

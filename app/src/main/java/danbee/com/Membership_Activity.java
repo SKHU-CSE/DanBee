@@ -31,6 +31,8 @@ public class Membership_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership_);
 
+        et = findViewById(R.id.membership_et_ID);
+
         //시작하면 reqestQueue가 만들어짐 Main에 넣기
         if(AppHelper.requestQueue == null)
             AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -40,7 +42,8 @@ public class Membership_Activity extends AppCompatActivity {
         checkIdBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkIdRequest();
+                if(et.getText() != null)
+                    checkIdRequest();
             }
         });
 
@@ -72,7 +75,7 @@ public class Membership_Activity extends AppCompatActivity {
             }
         });
 
-        et = findViewById(R.id.membership_et_ID);
+
         et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -182,6 +185,15 @@ public class Membership_Activity extends AppCompatActivity {
         EditText etname = findViewById(R.id.membership_et_name);
         String name = etname.getText().toString();
 
+        if(userid.equals("") || phone.equals("") || name.equals("") || pw2.equals("") || gender == -1 ){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                    .setTitle("빈칸이 존재합니다.")
+                    .setPositiveButton("확인",null)
+                    .setCancelable(false)
+                    .show();
+            return;
+        }
 
         String url = "http://3.17.25.223/api/user/signup/"+userid+"/"+spw1+"/"+phone+"/"+name+"/"+gender;
 
