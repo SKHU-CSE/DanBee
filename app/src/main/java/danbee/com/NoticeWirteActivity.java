@@ -18,7 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class NoticeWirte extends AppCompatActivity {
+public class NoticeWirteActivity extends AppCompatActivity {
 
     Activity activity = this;
     LinearLayout view;

@@ -23,7 +23,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-import danbee.com.noticedata.NoticeData;
 import danbee.com.noticedata.NoticeResult;
 
 public class NoticeActivity extends AppCompatActivity {
@@ -94,7 +93,7 @@ public class NoticeActivity extends AppCompatActivity {
         bt_write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), NoticeWirte.class);
+                Intent intent = new Intent(getApplication(), NoticeWirteActivity.class);
                 startActivityForResult(intent, WirteSuccessCode);
             }
         });
@@ -173,7 +172,7 @@ public class NoticeActivity extends AppCompatActivity {
             int datasize = noticeResult.data.size();
             Log.d("test", "Notice count: "+datasize);
 
-            for(int i=0; i<datasize; i++){
+            for(int i=datasize-1; i>=0; i--){
                 String title = noticeResult.data.get(i).title;
                 String content = noticeResult.data.get(i).content;
                 String date = noticeResult.data.get(i).time;

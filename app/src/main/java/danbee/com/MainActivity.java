@@ -25,7 +25,6 @@ import com.naver.maps.map.util.FusedLocationSource;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.Util;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
