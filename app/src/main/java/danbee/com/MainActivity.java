@@ -8,8 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.naver.maps.geometry.LatLng;
@@ -276,11 +281,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
+                qrCodeRequest(result.getContents());
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    void qrCodeRequest(String url){
+
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "qrcode: "+response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "qrcode: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
     }
 
 }
