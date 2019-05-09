@@ -8,7 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
@@ -217,7 +220,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = null;
         switch (index){
             case 0:
-
+                //qr코드 스캐너
+                new IntentIntegrator(this)
+                        .setPrompt("QR코드를 찍어주세요")
+                        .setOrientationLocked(true)
+                        .initiateScan();
                 break;
             case 1:
                 intent = new Intent(this, LoginActivity.class);
@@ -258,6 +265,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return R.color.danbeeBomButton3;
             default:
                 return R.color.colorPrimaryDark;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //qr코드 결과값
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
