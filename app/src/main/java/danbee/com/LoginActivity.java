@@ -6,8 +6,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,11 +22,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.logindata.LoginResult;
 import danbee.com.signupdata.UserIdCheckResult;
 
 public class LoginActivity extends AppCompatActivity {
     Activity activity;
+    boolean autoCheck = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,19 @@ public class LoginActivity extends AppCompatActivity {
                 loginRequest();
             }
         });
+
+        //자동로그인 체크박스
+        CheckBox cb_autoLogin = findViewById(R.id.auto_login);
+       cb_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+           @Override
+           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+               if(isChecked){
+                   autoCheck = true;
+               }else{
+                   autoCheck = false;
+               }
+           }
+       });
     }
 
     void loginRequest(){
@@ -109,14 +127,31 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("test", "LoginDataCount: "+loginResult.data.size());
             //user정보 저장
             String userid = loginResult.data.get(0).userid;
+            String phone = loginResult.data.get(0).phone;
+            String name = loginResult.data.get(0).name;
+            int gender = loginResult.data.get(0).gender;
+            String birth = loginResult.data.get(0).birth;
             UserInfo.info.setUserid(userid);
-            UserInfo.info.setPhone(loginResult.data.get(0).phone);
-            UserInfo.info.setName(loginResult.data.get(0).name);
-            UserInfo.info.setGender(loginResult.data.get(0).gender);
-            UserInfo.info.setBirth(loginResult.data.get(0).birth);
+            UserInfo.info.setPhone(phone);
+            UserInfo.info.setName(name);
+            UserInfo.info.setGender(gender);
+            UserInfo.info.setBirth(birth);
             UserInfo.info.setLoginState(true);
 
-            Toast.makeText(this.activity, "반갑습니다. "+userid+" 님", Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(this, "반갑습니다. "+userid+" 님", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
+
+            AutoLoginDbHelper.openDatabase(activity, "auto");
+            AutoLoginDbHelper.deleteLog();
+            AutoLoginDbHelper.createAutoTable();
+            //자동로그인 체크시
+            if(autoCheck) {
+                AutoLoginDbHelper.insertData(1, userid, phone, name, gender, birth);
+            }else{
+                AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
+            }
+
             finish();
         }
 

@@ -36,6 +36,8 @@ import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
+import danbee.com.DbHelper.AutoLoginDbHelper;
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //자동로그인확인
+        autoLogin();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); //만든툴바 액션바로 설정
 
@@ -257,12 +261,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     UserInfo.info.setLoginState(false);
                     UserInfo.info.setUserid("");
 
+                    //내부디비수정
+                    AutoLoginDbHelper.openDatabase(this, "auto");
+                    AutoLoginDbHelper.deleteLog();
+                    AutoLoginDbHelper.createAutoTable();
+                    AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
+
                     AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
                     adbuilder.setTitle("로그아웃 되었습니다.")
                             .setPositiveButton("확인", null)
                             .setCancelable(false)
                             .show();
-
+                    loginButtonChange();
                 }else { //로그인클릭
                     intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
@@ -361,6 +371,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             loginBoombt.getTextView().setText("로그인");
             loginBoombt.getImageView().setImageResource(R.drawable.unlock);
         }
+    }
+
+    //자동로그인
+    void autoLogin(){
+        AutoLoginDbHelper.openDatabase(this, "auto");
+        AutoLoginDbHelper.selectData();
     }
 
 }
