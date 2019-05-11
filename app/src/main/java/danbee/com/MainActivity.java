@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,7 @@ import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); //만든툴바 액션바로 설정
 
+        boomMenuSet();
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment == null) {
             mapFragment = MapFragment.newInstance();
@@ -58,7 +61,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-        boomMenuSet();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //로그인상태와 로그아웃상태 변경
+        loginButtonChange();
     }
 
     @Override
@@ -150,7 +161,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //버튼메뉴생성
     void boomMenuSet(){
+
         boombt = findViewById(R.id.bmb);
+
         for (int i = 0; i < boombt.getPiecePlaceEnum().pieceNumber(); i++) {
             TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder()
                     .normalImageRes(buttonImage(i))
@@ -177,7 +190,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 res=R.drawable.qrcode;
                 break;
             case 1:
-                res=R.drawable.lock;
+                if(UserInfo.info.isLoginState()){
+                    res = R.drawable.lock;
+                }else {
+                    res = R.drawable.unlock;
+                }
                 break;
             case 2:
                 res=R.drawable.profile;
@@ -205,7 +222,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case 0:
                 return title="QR코드";
             case 1:
-                return title="로그인";
+                if( UserInfo.info.isLoginState() ) {
+                    return title = "로그아웃";
+                }else{
+                    return title = "로그인";
+                }
             case 2:
                 return title="내정보";
             case 3:
@@ -232,8 +253,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .initiateScan();
                 break;
             case 1:
-                intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                if( UserInfo.info.isLoginState() ) { //로그아웃클릭
+                    UserInfo.info.setLoginState(false);
+                    UserInfo.info.setUserid("");
+
+                    AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
+                    adbuilder.setTitle("로그아웃 되었습니다.")
+                            .setPositiveButton("확인", null)
+                            .setCancelable(false)
+                            .show();
+
+                }else { //로그인클릭
+                    intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case 2:
 
@@ -289,8 +322,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    //qr코드 통신
     void qrCodeRequest(String url){
-
+        // http://3.17.25.223/api/kick/borrow/{userid}/{kickid}
+        // http://3.17.25.223/api/kick/lend/{userid}
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 url,
@@ -310,6 +345,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //자동캐싱잇는경우 이전결과 그대로보여짐
         request.setShouldCache(false);  //새로요청해서 결과보여줌
         AppHelper.requestQueue.add(request);
+    }
+
+    //로그인 로그아웃 버튼상태변경
+    void loginButtonChange(){
+
+        BoomButton loginBoombt = boombt.getBoomButton(1);
+        if (loginBoombt == null)
+            return;
+
+        if(UserInfo.info.isLoginState()) {
+            loginBoombt.getTextView().setText("로그아웃");
+            loginBoombt.getImageView().setImageResource(R.drawable.lock);
+        }else{
+            loginBoombt.getTextView().setText("로그인");
+            loginBoombt.getImageView().setImageResource(R.drawable.unlock);
+        }
     }
 
 }
