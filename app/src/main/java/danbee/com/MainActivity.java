@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.naver.maps.geometry.LatLng;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(AppHelper.requestQueue == null)
+            AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
+
         //자동로그인확인
         autoLogin();
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -333,9 +337,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //qr코드 통신
-    void qrCodeRequest(String url){
-        // http://3.17.25.223/api/kick/borrow/{userid}/{kickid}
+    void qrCodeRequest(String suburl){
+        // http://3.17.25.223/api/kick/borrow/{kickid}/{userid}
         // http://3.17.25.223/api/kick/lend/{userid}
+        String userid = UserInfo.info.getUserid();
+        String url = suburl+"/"+userid;
         StringRequest request = new StringRequest(
                 Request.Method.GET,
                 url,
