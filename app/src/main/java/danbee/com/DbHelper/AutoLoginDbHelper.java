@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import danbee.com.MainActivity;
 import danbee.com.UserInfo;
 
 public class AutoLoginDbHelper {
@@ -82,6 +83,7 @@ public class AutoLoginDbHelper {
                 UserInfo.info.setBirth(cursor.getString(6));
                 UserInfo.info.setLoginState(true);
                 Log.d("test", "자동로그인 유저정보저장");
+
             }
 
             cursor.close();

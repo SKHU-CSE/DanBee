@@ -5,11 +5,13 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,6 +40,7 @@ import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
+import danbee.com.service.ShowNotificationService;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if(AppHelper.requestQueue == null)
             AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -276,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .setPositiveButton("확인", null)
                             .setCancelable(false)
                             .show();
+                    stopService();
                     loginButtonChange();
                 }else { //로그인클릭
                     intent = new Intent(this, LoginActivity.class);
@@ -349,6 +354,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onResponse(String response) {
                         Log.d("test", "qrcode: "+response);
+                        startService(); //빌리기시작하면 배터리용량알려줌
                     }
                 },
                 new Response.ErrorListener() {
@@ -383,6 +389,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     void autoLogin(){
         AutoLoginDbHelper.openDatabase(this, "auto");
         AutoLoginDbHelper.selectData();
+    }
+
+    //Service실행 - qr코드로 빌릴시
+    public void startService(){
+        int battery = 95;
+        Intent serviceIntent = new Intent(this, ShowNotificationService.class);
+        serviceIntent.putExtra("battery", battery);
+        ContextCompat.startForegroundService(this, serviceIntent);
+
+    }
+
+    //Service중지 - 로그아웃시
+    public void stopService(){
+        Intent serviceIntent = new Intent(this, ShowNotificationService.class);
+        stopService(serviceIntent);
     }
 
 }
