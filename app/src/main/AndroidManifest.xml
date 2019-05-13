@@ -9,17 +9,19 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/danbeelogoj"
         android:label="@string/app_name"
         android:roundIcon="@drawable/danbeelogoj"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        android:hardwareAccelerated="true">
-
-        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".MypageActivity"></activity>
+        <activity android:name=".FindUserActivity" />
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation"/>
+            tools:replace="screenOrientation" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="fullSensor">

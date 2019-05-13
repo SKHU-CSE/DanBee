@@ -2,6 +2,7 @@ package danbee.com;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -96,7 +97,8 @@ public class NoticeWirteActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         view.setVisibility(View.GONE);
-                                        setResult(RESULT_OK);
+                                        Intent intent = new Intent();
+                                        setResult(RESULT_OK, intent);
                                         finish();
                                     }
                                 })
@@ -115,7 +117,7 @@ public class NoticeWirteActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         view.setVisibility(View.GONE);
-                                        setResult(RESULT_OK);
+                                        setResult(RESULT_CANCELED);
                                         finish();
                                     }
                                 })

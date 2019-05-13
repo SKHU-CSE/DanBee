@@ -53,7 +53,7 @@ public class NoticeActivity extends AppCompatActivity {
         //컨텍스트, 방향, 아이템보이는방향(위->아래, 아래->위)
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new NoticeRecyclerViewAdapter(this);
+        adapter = new NoticeRecyclerViewAdapter(this,items);
         recyclerView.setAdapter(adapter);
 
         //카드뷰클릭시 이벤트
@@ -88,7 +88,7 @@ public class NoticeActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //작성하기 버튼
         Button bt_write = findViewById(R.id.noticewrite_bt_write);
         bt_write.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,8 +137,16 @@ public class NoticeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //공지사항최신화
+        sendRequest();
+    }
+
     //서버 통신
     void sendRequest(){
+        items.clear();
         String url = "http://3.17.25.223/api/notice/list";
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -179,7 +187,6 @@ public class NoticeActivity extends AppCompatActivity {
                 items.add(new NoticeItem(title,content,date));
             }
 
-            adapter.setItems(items);  //변경된 리스트로반영
             adapter.notifyDataSetChanged();
         }
     }
@@ -188,6 +195,8 @@ public class NoticeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == WirteSuccessCode) {
+            Log.d("test", String.valueOf(requestCode));
+            Log.d("test", String.valueOf(resultCode));
             if (resultCode == RESULT_OK) {  //글작성한경우만 리스트최신화
                 sendRequest();
             }

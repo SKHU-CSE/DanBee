@@ -22,5 +22,15 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //아이디비밀번호찾기버튼
+        TextView tv_find = findViewById(R.id.findidpw);
+        tv_find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FindUserActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
