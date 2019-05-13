@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Danbee</string>
-
+    <string-array name="find_segment_string">
+        <item>아이디</item>
+        <item>비밀번호</item>
+    </string-array>
+    <string-array name="notice_segment_string">
+        <item>공지사항</item>
+        <item>문의사항</item>
+    </string-array>
 </resources>

@@ -1,37 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NoticeActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+
+        <segmented_control.widget.custom.android.com.segmentedcontrol.SegmentedControl
+            android:id="@+id/segmented_control"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <Button
-            android:id="@+id/notice_bt_notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="공지사항" />
-
-        <Button
-            android:id="@+id/notice_bt_question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="문의사항" />
-        </LinearLayout>
+            android:layout_margin="8dp"
+            app:columnCount="2"
+            app:distributeEvenly="true"
+            app:textVerticalPadding="6dp"
+            app:radius="12dp"
+            app:textSize="18dp"
+            android:layout_marginTop="30dp"
+            app:segments="@array/notice_segment_string" />
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/notice_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/notice_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -96,7 +91,7 @@
 
     <Button
         android:id="@+id/noticewrite_bt_write"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="작성하기"
@@ -104,6 +99,6 @@
         android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"
         android:drawableLeft="@drawable/noticewrite"
-        android:background="@drawable/rectangle_yellow"
+        android:background="@drawable/bt_click_yellow"
         />
 </FrameLayout>

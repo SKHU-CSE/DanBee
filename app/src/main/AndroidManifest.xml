@@ -18,9 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <service
             android:name=".service.ShowNotificationService"
             />
+        <activity android:name=".MypageActivity"></activity>
+        <activity android:name=".FindUserActivity" />
 
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

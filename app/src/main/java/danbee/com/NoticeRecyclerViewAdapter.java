@@ -15,11 +15,13 @@ public class NoticeRecyclerViewAdapter extends RecyclerView.Adapter<NoticeRecycl
 
     Activity context;
     NoticeItem item;
-    static ArrayList<NoticeItem> items = new ArrayList<NoticeItem>(); //데이터
+    static ArrayList<NoticeItem> items; //데이터
     OnItemClickListener listener;
 
-    public NoticeRecyclerViewAdapter (Activity context){
+
+    public NoticeRecyclerViewAdapter (Activity context,ArrayList<NoticeItem> items){
         this.context = context;
+        this.items=items;
     }
 
     @NonNull
@@ -43,15 +45,6 @@ public class NoticeRecyclerViewAdapter extends RecyclerView.Adapter<NoticeRecycl
         return items.size();
     }
 
-    //데이터추가
-    public void addItem(NoticeItem item){
-        items.add(item);
-    }
-
-    //데이터수정
-    public void setItems(ArrayList<NoticeItem> items){
-        this.items = items;
-    }
 
     //해당데이터반환
     public NoticeItem getItem(int position){
