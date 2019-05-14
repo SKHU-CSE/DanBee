@@ -89,6 +89,9 @@
             android:textSize="15sp"
             android:layout_alignParentRight="true"
             android:textColor="#000000" />
+
+
+
     </RelativeLayout>
 
     <View
@@ -99,5 +102,18 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:background="#000000"/>
+
+    <com.kakao.usermgmt.LoginButton
+        android:id="@+id/kakao_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view"
+        android:layout_alignLeft="@id/loginBT"
+        android:layout_alignRight="@id/loginBT"
+        android:layout_marginTop="30dp"
+
+
+        >
+    </com.kakao.usermgmt.LoginButton>
 
 </RelativeLayout>
