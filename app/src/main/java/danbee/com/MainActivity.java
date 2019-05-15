@@ -439,4 +439,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.e("name not found", e.toString());
         }
     }
+
+    /*
+    // 회원탈퇴 처리
+    UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
+        @Override
+        public void onFailure(ErrorResult errorResult) {
+            int result = errorResult.getErrorCode();
+
+            if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
+                Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onSessionClosed(ErrorResult errorResult) {
+            Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onNotSignedUp() {
+            Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(Long result) { }
+    });
+
+     */
 }
