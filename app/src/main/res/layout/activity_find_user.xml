@@ -5,65 +5,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
-
-
-    <EditText
-        android:id="@+id/find_user_et_name"
-        android:layout_below="@id/segmented_control"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="이름"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        android:inputType="text"
-        android:lines="1"
-        android:background="@drawable/stroke_sign_gray"
-        android:padding="15dp"/>
-
-    <EditText
-        android:id="@+id/find_user_et_phone"
-        android:layout_below="@id/find_user_et_name"
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
-        android:hint="전화번호"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        android:inputType="textPassword"
-        android:lines="1"
-        android:background="@drawable/stroke_sign_gray"
-        android:padding="15dp"/>
-
     <segmented_control.widget.custom.android.com.segmentedcontrol.SegmentedControl
         android:id="@+id/segmented_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/find_user_et_name"
-        android:layout_alignRight="@id/find_user_et_name"
+        android:layout_marginHorizontal="50dp"
         android:layout_marginVertical="60dp"
+        android:layout_marginTop="30dp"
         app:columnCount="2"
         app:distributeEvenly="true"
-        app:textVerticalPadding="6dp"
         app:radius="12dp"
+        app:segments="@array/find_segment_string"
         app:textSize="18dp"
-        android:layout_marginTop="30dp"
-        app:segments="@array/find_segment_string" />
+        app:textVerticalPadding="6dp" />
 
-    <Button
-        android:id="@+id/find_user_bt_id"
+    <FrameLayout
+        android:id="@+id/fl_finduser"
+        android:layout_below="@id/segmented_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/find_user_et_phone"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="30dp"
-        android:text="아이디 찾기"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        android:background="@drawable/bt_click_orange"/>
+        android:layout_marginHorizontal="50dp">
 
+
+    </FrameLayout>
 
 </RelativeLayout>

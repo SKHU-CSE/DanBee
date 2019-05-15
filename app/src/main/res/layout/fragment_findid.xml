@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+     <EditText
+        android:id="@+id/findid_user_et_name"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="이름"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:inputType="text"
+        android:lines="1"
+        android:background="@drawable/stroke_sign_gray"
+        android:padding="15dp"/>
+
+    <EditText
+        android:id="@+id/findid_user_et_phone"
+        android:layout_below="@id/findid_user_et_name"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="전화번호"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:inputType="number"
+        android:lines="1"
+        android:background="@drawable/stroke_sign_gray"
+        android:padding="15dp"/>
+
+
+    <Button
+        android:id="@+id/findid_user_bt_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/findid_user_et_phone"
+        android:layout_marginTop="30dp"
+        android:text="아이디 찾기"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:background="@drawable/bt_click_orange"/>
+</RelativeLayout>

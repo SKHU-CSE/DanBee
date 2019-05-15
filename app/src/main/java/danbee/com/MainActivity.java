@@ -388,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //자동로그인
     void autoLogin(){
         AutoLoginDbHelper.openDatabase(this, "auto");
+        AutoLoginDbHelper.createAutoTable();
         AutoLoginDbHelper.selectData();
     }
 

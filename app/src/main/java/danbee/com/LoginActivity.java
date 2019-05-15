@@ -69,6 +69,18 @@ public class LoginActivity extends AppCompatActivity {
                }
            }
        });
+
+
+        //아이디비밀번호찾기버튼
+        TextView tv_findUser = findViewById(R.id.findidpw);
+        tv_findUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FindUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     void loginRequest(){
@@ -154,16 +166,6 @@ public class LoginActivity extends AppCompatActivity {
 
             finish();
         }
-
-        //아이디비밀번호찾기버튼
-        TextView tv_find = findViewById(R.id.findidpw);
-        tv_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FindUserActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 }
