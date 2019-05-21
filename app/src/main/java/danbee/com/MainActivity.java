@@ -298,7 +298,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 break;
             case 5:
-
+                intent = new Intent(this, UserHistoryActivity.class);
+                startActivity(intent);
                 break;
             case 6:
 
@@ -388,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //자동로그인
     void autoLogin(){
         AutoLoginDbHelper.openDatabase(this, "auto");
+        AutoLoginDbHelper.createAutoTable();
         AutoLoginDbHelper.selectData();
     }
 

@@ -70,6 +70,8 @@ public class AutoLoginDbHelper {
             String sql="select * from auto";
             Cursor cursor = database.rawQuery(sql, null);//결과값이존재하는 쿼리문
             Log.d("test","조회된 데이터 개수 : "+ cursor.getCount());
+            if(cursor.getCount() == 0)
+                return;
             int i = 0;
             cursor.moveToFirst();
             int state = cursor.getInt(1);
@@ -91,7 +93,7 @@ public class AutoLoginDbHelper {
     }
 
     public static void deleteLog(){
-        database.execSQL("drop table if exists auto");  //기존table삭제
+        database.execSQL("delete from auto");  //기존table삭제
         Log.d("test", "테이블 삭제");
 
     }
