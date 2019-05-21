@@ -14,13 +14,12 @@
             android:id="@+id/segmented_control"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="30dp"
             app:columnCount="2"
             app:distributeEvenly="true"
             app:textVerticalPadding="6dp"
             app:radius="12dp"
             app:textSize="18dp"
-            android:layout_marginTop="30dp"
             app:segments="@array/notice_segment_string" />
 
         <android.support.v7.widget.RecyclerView

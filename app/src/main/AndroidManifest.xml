@@ -20,6 +20,8 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".UserHistoryActivity"></activity>
 
+        <activity android:name=".ChangePwActivity"></activity>
+
         <service android:name=".service.ShowNotificationService" />
 
         <activity android:name=".MypageActivity" />
@@ -41,6 +43,9 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/Client_ID" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
 
         <activity
             android:name=".NoticeWirteActivity"
@@ -52,7 +57,7 @@
             android:name=".NoticeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Membership_Activity"
+            android:name=".MembershipActivity"
             android:screenOrientation="portrait" />
     </application>
 

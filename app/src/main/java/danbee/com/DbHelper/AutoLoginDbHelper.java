@@ -70,7 +70,7 @@ public class AutoLoginDbHelper {
             String sql="select * from auto";
             Cursor cursor = database.rawQuery(sql, null);//결과값이존재하는 쿼리문
             Log.d("test","조회된 데이터 개수 : "+ cursor.getCount());
-            if(cursor.getCount() == 0)
+            if( cursor.getCount() == 0) //데이터없으면 조회x
                 return;
             int i = 0;
             cursor.moveToFirst();
