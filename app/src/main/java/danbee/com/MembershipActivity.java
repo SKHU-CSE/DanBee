@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 
 import danbee.com.signupdata.UserIdCheckResult;
 
-public class Membership_Activity extends AppCompatActivity {
+public class MembershipActivity extends AppCompatActivity {
 
     Activity activity = this;
     int gender = -1;

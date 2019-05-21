@@ -33,7 +33,6 @@ import com.kakao.util.exception.KakaoException;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.logindata.LoginResult;
-import danbee.com.signupdata.UserIdCheckResult;
 
 public class LoginActivity extends AppCompatActivity {
     Activity activity;
@@ -54,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         tv_singUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Membership_Activity.class);
+                Intent intent = new Intent(getApplicationContext(), MembershipActivity.class);
                 startActivity(intent);
             }
         });
