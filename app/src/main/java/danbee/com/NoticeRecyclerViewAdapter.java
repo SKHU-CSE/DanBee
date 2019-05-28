@@ -61,7 +61,7 @@ public class NoticeRecyclerViewAdapter extends RecyclerView.Adapter<NoticeRecycl
     }
 
     ///////////////////////////////////////////////////////
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView tv_title;
       //  TextView tv_content;
         TextView tv_date;

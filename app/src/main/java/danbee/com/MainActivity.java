@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -310,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 break;
             case 4:
-                intent = new Intent(this, NoticeActivity.class);
+                intent = new Intent(this, NoticeQuestionActivity.class);
                 startActivity(intent);
                 break;
             case 5:
