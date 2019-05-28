@@ -302,6 +302,27 @@ public class LoginActivity extends AppCompatActivity {
                         // UserInfo.info.setPhone(phone);
                         UserInfo.info.setLoginState(true);
 
+                        /*
+
+
+
+                        서버에 유저정보 저장하기
+
+
+
+                         */
+
+                        AutoLoginDbHelper.openDatabase(activity, "auto");
+                        AutoLoginDbHelper.deleteLog();
+                        AutoLoginDbHelper.createAutoTable();
+                        //자동로그인 체크시
+                        if (autoCheck) {
+                            AutoLoginDbHelper.insertData(1, email, "", name, UserInfo.info.getGender(), birth);
+                        } else {
+                            AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
+                        }
+
+
                         Log.d("test", "name: " + name + " email: " + email + " gender: " + gender + " birth: " + birth);
                         finish();
                     }

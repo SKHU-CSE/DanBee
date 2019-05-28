@@ -318,7 +318,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 break;
             case 6:
-
+                intent = new Intent(this, GuideActivity.class);
+                startActivity(intent);
                 break;
             default:
                 return;

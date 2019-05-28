@@ -62,8 +62,16 @@ public class HistoryItem {
             Date sTime = format1.parse(startDate);
             Date eTime = format1.parse(endDate);
 
-            long time = (eTime.getTime() - sTime.getTime())/60000;
-            Log.d("test", "gettime: "+time);
+            long duration = (eTime.getTime() - sTime.getTime())/1000;
+            long time;
+
+            if (duration < 60){
+                time = 1;
+            }else {
+                time = (eTime.getTime() - sTime.getTime())/60000;
+            }
+
+            Log.d("test", "gettime: "+duration);
             return String.valueOf(time);
         } catch (ParseException e) {
             e.printStackTrace();
