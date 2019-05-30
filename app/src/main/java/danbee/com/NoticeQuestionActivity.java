@@ -44,6 +44,7 @@ public class NoticeQuestionActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    noticeFragment.isPageShow = false;
                     getSupportFragmentManager().beginTransaction().replace(R.id.noticeQuestion_frameLayout,questionFragment).commit();
                 }
 

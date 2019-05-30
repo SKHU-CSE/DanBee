@@ -42,7 +42,7 @@ public class NoticeFragment extends Fragment {
     Animation translateRight;
     final int WirteSuccessCode = 777;
     ArrayList<NoticeItem> items = new ArrayList<NoticeItem>();
-    boolean isPageShow = false;
+    public boolean isPageShow = false;
     NoticeRecyclerViewAdapter adapter;
     Context context;
 
