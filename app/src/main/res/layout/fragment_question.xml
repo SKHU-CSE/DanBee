@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.QuestionFragment">
+    tools:context=".fragment.QuestionFragment"
+    android:orientation="vertical">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/question_fragment_expand_tv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="문의사항 페이지"
-        android:layout_centerInParent="true"
-        />
-</RelativeLayout>
+        android:background="#abcdef"
+        android:padding="16dp"
+        android:text="title"/>
+
+        <ImageView
+            android:id="@+id/question_fragment_down"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/downarrow"/>
+    </RelativeLayout>
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/question_fragment_expandable_layout"
+        android:background="#dddddd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:el_duration="1000"
+        app:el_expanded="false"
+        app:el_parallax="0.5"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#aaaaaa"
+            android:padding="16dp"
+            android:text="content" />
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+
+
+</LinearLayout>
