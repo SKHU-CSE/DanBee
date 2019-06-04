@@ -18,8 +18,8 @@ public class HistoryItem {
         this.endDate = endDate;
         this.kickId = kickId;
     }
-    public String getDate(){
 
+    public String getDate(){
         try {
             Date sDate = format1.parse(startDate);  //시작날짜
             Date eDate = format1.parse(endDate);    //종료 날짜

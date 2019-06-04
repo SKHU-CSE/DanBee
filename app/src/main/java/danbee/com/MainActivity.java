@@ -1,5 +1,7 @@
 package danbee.com;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -265,8 +267,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     void btClickIntent(int index){
         Intent intent = null;
-        switch (index){
+        switch (index) {
             case 0:
+                if (UserInfo.info.getUserid() == null || UserInfo.info.getUserid().equals("")) { // 로그인 안되있을 때
+                    loginCheckMessage();
+                    return;
+                }
                 //qr코드 스캐너
                 new IntentIntegrator(this)
                         .setPrompt("QR코드를 찍어주세요")
@@ -274,9 +280,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .initiateScan();
                 break;
             case 1:
-                if( UserInfo.info.isLoginState() ) { //로그아웃클릭
+                if (UserInfo.info.isLoginState()) { //로그아웃클릭
                     UserInfo.info.setLoginState(false);
                     UserInfo.info.setUserid("");
+                    UserInfo.info.setPhone("");
+                    UserInfo.info.setName("");
+                    UserInfo.info.setGender(-1);
+                    UserInfo.info.setBirth("");
+
 
                     //내부디비수정
                     AutoLoginDbHelper.openDatabase(this, "auto");
@@ -298,13 +309,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         }
                     });
-                }else { //로그인클릭
+                } else { //로그인클릭
                     intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
                 break;
             case 2:
-
+                if (UserInfo.info.getUserid() == null || UserInfo.info.getUserid().equals("")) { // 로그인 안되있을 때
+                    loginCheckMessage();
+                    return;
+                }
+                intent = new Intent(this, MypageActivity.class);
+                startActivity(intent);
                 break;
             case 3:
 
@@ -314,6 +330,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 break;
             case 5:
+                if (UserInfo.info.getUserid() == null || UserInfo.info.getUserid().equals("")) { // 로그인 안되있을 때
+                    loginCheckMessage();
+                    return;
+                }
                 intent = new Intent(this, UserHistoryActivity.class);
                 startActivity(intent);
                 break;
@@ -424,7 +444,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         stopService(serviceIntent);
     }
 
-
     //Kakao 해시키가져오기
     private void getAppKeyHash() {
         try {
@@ -440,6 +459,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // TODO Auto-generated catch block
             Log.e("name not found", e.toString());
         }
+    }
+
+    //로그인 안했을시 나타나는 다이얼로그
+    public void loginCheckMessage() {
+        AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
+        adbuilder.setTitle("알림")
+                .setMessage("로그인을 하시오.")
+                .setCancelable(false)
+                .setIcon(R.drawable.danbeelogoj)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this , LoginActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .show();
     }
 
     /*
