@@ -17,7 +17,15 @@
         app:textVerticalPadding="6dp"
         app:radius="12dp"
         app:textSize="18dp"
-        app:segments="@array/notice_segment_string" />
+        app:segments="@array/notice_segment_string"
+        app:selectedBackgroundColor="#ff8b00"
+        app:unSelectedBackgroundColor="#ffffff"
+        app:selectedTextColor="#ffffff"
+        app:unSelectedTextColor="#000000"
+        app:selectedStrokeColor="#ff8b00"
+        app:unSelectedStrokeColor="#ff8b00"
+        app:focusedBackgroundColor="#ffe0b2"
+        />
 
     <FrameLayout
         android:layout_width="match_parent"
