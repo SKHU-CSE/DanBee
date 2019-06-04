@@ -8,12 +8,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -36,11 +40,10 @@ import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
-import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.InfoWindow;
-import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
@@ -52,18 +55,33 @@ import java.security.MessageDigest;
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.service.ShowNotificationService;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
     Marker marker;
+    NaverMap mnaverMap;
+    LatLng mCurPos;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
 
     BoomMenuButton boombt;
-
     boolean startPos = true;
+
+    CardView batteryCard;
+
+    //    private SensorManager mSensorManager;
+//    private Sensor mAccelerometer;
+//    private Sensor mMagnetometer;
+//    private float[] mLastAccelerometer = new float[3];
+//    private float[] mLastMagnetometer = new float[3];
+//    private boolean mLastAccelerometerSet = false;
+//    private boolean mLastMagnetometerSet = false;
+//    private float[] mR = new float[9];
+//    private float[] mOrientation = new float[3];
+//    private float mCurrentDegree = 0f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        batteryCard = findViewById(R.id.main_battery_cardview);
         //kakao 해시키가져옴
         getAppKeyHash();
         if(AppHelper.requestQueue == null)
@@ -85,6 +103,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
+//        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+//        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        //현위치 다시찾기
+        findViewById(R.id.main_gps_imageButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCurPos != null){
+                    mnaverMap.setCameraPosition(new CameraPosition(mCurPos, 17));
+                }
+            }
+        });
     }
 
     @Override
@@ -93,6 +124,54 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //로그인상태와 로그아웃상태 변경
         loginButtonChange();
+
+        //센서 등록
+//        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+//        mSensorManager.registerListener( this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+
+        if(UserInfo.info.getKickid() != -1){
+            batteryCard.setVisibility(View.VISIBLE);
+            /*
+            킥보드 배터리 양체크 통신, 반납하기버튼
+             */
+        }else{
+            batteryCard.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //센서반납
+//        mSensorManager.unregisterListener( this, mAccelerometer);
+//        mSensorManager.unregisterListener( this, mMagnetometer);
+    }
+
+    //방위각 체크하기위한 센서
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//        if(event.sensor == mAccelerometer){
+//            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
+//            mLastAccelerometerSet = true;
+//        }else if(event.sensor == mMagnetometer){
+//            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
+//            mLastMagnetometerSet = true;
+//        }
+//        if(mLastAccelerometerSet && mLastMagnetometerSet){
+//            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
+//            float azimuthinDegress = (int) (Math.toDegrees(SensorManager.getOrientation(mR, mOrientation)[0])+360)%360;
+//            mCurrentDegree = azimuthinDegress;
+//            if (mnaverMap != null){
+//                mnaverMap.getLocationOverlay().setBearing(mCurrentDegree);
+//            }
+//        }
+    }
+
+    //센서 인터페이스 오버라이드해줘야함
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
     @Override
@@ -106,15 +185,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
     @Override
     public void onMapReady(@NonNull final NaverMap naverMap) {
+        mnaverMap = naverMap;
         naverMap.setLocationSource(locationSource); //현위치
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Face);
-
-
+        naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
 
         // 위치(위도,경도) 객체
-        LatLng location = new LatLng(37.487936, 126.825071);
+        LatLng maker_location = new LatLng(37.487936, 126.825071);
 
         //위치변경시 콜백
         naverMap.addOnLocationChangeListener(new NaverMap.OnLocationChangeListener() {
@@ -123,14 +202,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (naverMap == null || location == null) {
                     return;
                 }
-
-                CameraPosition cameraPosition = new CameraPosition(new LatLng(location.getLatitude(), location.getLongitude()), 17);
-                LocationOverlay locationOverlay = naverMap.getLocationOverlay();
-                locationOverlay.setBearing(location.getBearing());
-
+                mCurPos = new LatLng(location.getLatitude(), location.getLongitude());
+                CameraPosition cameraPosition = new CameraPosition(mCurPos, 17);
 
                 //현위치 최초설정
-                if (startPos) {
+                if (startPos == true) {
                     naverMap.setCameraPosition(cameraPosition);
                     startPos = !startPos;
                 }
@@ -138,11 +214,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
-        UiSettings uiSettings=naverMap.getUiSettings(); // UI관련 설정 담당
-        uiSettings.setLocationButtonEnabled(true); //현위치 활성화
 
         marker = new Marker(); //마커 생성
-        marker.setPosition(location); //마커 위치설정
+        marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
+        marker.setWidth(150);
+        marker.setHeight(150);
+        marker.setPosition(maker_location); //마커 위치설정
         marker.setMap(naverMap); //마커 표시 (보여짐)
 
 
@@ -179,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng northWest = new LatLng(31.43, 122.37);
         LatLng southEast = new LatLng(44.35, 132);
         naverMap.setExtent(new LatLngBounds(northWest, southEast));
+
 
     }
 
@@ -326,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 break;
             case 4:
-                intent = new Intent(this, NoticeActivity.class);
+                intent = new Intent(this, NoticeQuestionActivity.class);
                 startActivity(intent);
                 break;
             case 5:
@@ -338,7 +416,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 break;
             case 6:
-
+                intent = new Intent(this, GuideActivity.class);
+                startActivity(intent);
                 break;
             default:
                 return;
@@ -383,6 +462,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // http://3.17.25.223/api/kick/borrow/{kickid}/{userid}
         // http://3.17.25.223/api/kick/lend/{userid}
         String userid = UserInfo.info.getUserid();
+        String kickid = suburl.substring(35);
+        UserInfo.info.setKickid(Integer.parseInt(kickid));
+        Log.d("test", "kickid: "+kickid+", "+suburl);
         String url = suburl+"/"+userid;
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -507,4 +589,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     });
 
      */
+
+
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".NoticeQuestionActivity"
+    android:orientation="vertical">
+
+    <segmented_control.widget.custom.android.com.segmentedcontrol.SegmentedControl
+        android:id="@+id/segmented_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:columnCount="2"
+        app:distributeEvenly="true"
+        app:textVerticalPadding="6dp"
+        app:radius="12dp"
+        app:textSize="18dp"
+        app:segments="@array/notice_segment_string"
+        app:selectedBackgroundColor="#ff8b00"
+        app:unSelectedBackgroundColor="#ffffff"
+        app:selectedTextColor="#ffffff"
+        app:unSelectedTextColor="#000000"
+        app:selectedStrokeColor="#ff8b00"
+        app:unSelectedStrokeColor="#ff8b00"
+        app:focusedBackgroundColor="#ffe0b2"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/noticeQuestion_frameLayout">
+
+
+    </FrameLayout>
+
+</LinearLayout>

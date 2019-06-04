@@ -8,6 +8,15 @@ public class UserInfo {
     private String name;
     private int gender;
     private String birth;
+    private int kickid = -1;
+
+    public int getKickid() {
+        return kickid;
+    }
+
+    public void setKickid(int kickid) {
+        this.kickid = kickid;
+    }
 
     public String getUserid() {
         return userid;

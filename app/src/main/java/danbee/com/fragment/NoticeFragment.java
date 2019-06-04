@@ -1,13 +1,18 @@
-package danbee.com;
+package danbee.com.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -23,37 +28,49 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import danbee.com.AppHelper;
+import danbee.com.NoticeItem;
+import danbee.com.NoticeRecyclerViewAdapter;
+import danbee.com.NoticeWirteActivity;
+import danbee.com.R;
 import danbee.com.noticedata.NoticeResult;
 
-public class NoticeActivity extends AppCompatActivity {
-
+public class NoticeFragment extends Fragment {
     RecyclerView recyclerView;
     RelativeLayout detailView;
     Animation translateLeft;
     Animation translateRight;
     final int WirteSuccessCode = 777;
     ArrayList<NoticeItem> items = new ArrayList<NoticeItem>();
-    boolean isPageShow = false;
+    public boolean isPageShow = false;
     NoticeRecyclerViewAdapter adapter;
+    Context context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice);
-        set();
-
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
         //시작하면 reqestQueue가 만들어짐 Main에 넣기
         if(AppHelper.requestQueue == null)
-            AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
+            AppHelper.requestQueue = Volley.newRequestQueue(context);
 
+    }
+
+    @Nullable
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_notice, container, false);
+
+        set(rootView);
         sendRequest(); //통신
 
-        recyclerView = findViewById(R.id.notice_recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView = rootView.findViewById(R.id.notice_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         //컨텍스트, 방향, 아이템보이는방향(위->아래, 아래->위)
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new NoticeRecyclerViewAdapter(this,items);
+        adapter = new NoticeRecyclerViewAdapter((Activity)context, items);
         recyclerView.setAdapter(adapter);
 
         //카드뷰클릭시 이벤트
@@ -89,24 +106,24 @@ public class NoticeActivity extends AppCompatActivity {
             }
         });
         //작성하기 버튼
-        Button bt_write = findViewById(R.id.noticewrite_bt_write);
+        Button bt_write = rootView.findViewById(R.id.noticewrite_bt_write);
         bt_write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), NoticeWirteActivity.class);
+                Intent intent = new Intent(context, NoticeWirteActivity.class);
                 startActivityForResult(intent, WirteSuccessCode);
             }
         });
 
-
+        return rootView;
     }
 
     //초기 설정
-    void set(){
-        detailView = findViewById(R.id.notice_detail_view);  //슬라이드될 뷰
+    void set(ViewGroup rootView){
+        detailView = rootView.findViewById(R.id.notice_detail_view);  //슬라이드될 뷰
         //애니메이션 설정
-        translateLeft = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.notice_translate_left);
-        translateRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.notice_translate_right);
+        translateLeft = AnimationUtils.loadAnimation(context, R.anim.notice_translate_left);
+        translateRight = AnimationUtils.loadAnimation(context, R.anim.notice_translate_right);
 
         SlideNoticeDetailView listener = new SlideNoticeDetailView();
         translateRight.setAnimationListener(listener);
@@ -138,7 +155,7 @@ public class NoticeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         //공지사항최신화
         sendRequest();
@@ -191,15 +208,5 @@ public class NoticeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == WirteSuccessCode) {
-            Log.d("test", String.valueOf(requestCode));
-            Log.d("test", String.valueOf(resultCode));
-            if (resultCode == RESULT_OK) {  //글작성한경우만 리스트최신화
-                sendRequest();
-            }
-        }
-    }
+
 }
