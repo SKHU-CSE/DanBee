@@ -1,6 +1,7 @@
 package danbee.com;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.exception.KakaoException;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
+import danbee.com.deletedata.DeleteResult;
 import danbee.com.logindata.LoginResult;
 
 public class LoginActivity extends AppCompatActivity {
@@ -80,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
            }
        });
 
-
         //아이디비밀번호찾기버튼
         TextView tv_findUser = findViewById(R.id.findidpw);
         tv_findUser.setOnClickListener(new View.OnClickListener() {
@@ -91,16 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        cb_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    autoCheck = true;
-                } else {
-                    autoCheck = false;
-                }
-            }
-        });
+
 
         sessionCallback = new SessionCallback();
         Session.getCurrentSession().addCallback(sessionCallback);
@@ -302,15 +294,8 @@ public class LoginActivity extends AppCompatActivity {
                         // UserInfo.info.setPhone(phone);
                         UserInfo.info.setLoginState(true);
 
-                        /*
-
-
-
-                        서버에 유저정보 저장하기
-
-
-
-                         */
+                        //서버에 유저정보 저장하기
+                        snsRequest(email, name, UserInfo.info.getGender(), birth);
 
                         AutoLoginDbHelper.openDatabase(activity, "auto");
                         AutoLoginDbHelper.deleteLog();
@@ -337,4 +322,30 @@ public class LoginActivity extends AppCompatActivity {
 
         }
     }
+
+    // sns가입
+    // "http://3.17.25.223/api/user/sns/signup/{userid}/{name}/{gender}/{birth}"
+    void snsRequest(String userid, String name, int gender, String birth){
+        String url = "http://3.17.25.223/api/user/sns/signup/"+userid+"/"+name+"/"+gender+"/"+birth;
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "sns: "+response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "sns: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+    }
+
 }

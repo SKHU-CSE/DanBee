@@ -22,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.kakao.usermgmt.UserManagement;
@@ -53,9 +56,11 @@ import com.nightonke.boommenu.BoomMenuButton;
 import java.security.MessageDigest;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
+import danbee.com.deletedata.DeleteResult;
+import danbee.com.kickdata.BatteryResult;
 import danbee.com.service.ShowNotificationService;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
     NaverMap mnaverMap;
     LatLng mCurPos;
@@ -66,22 +71,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     boolean startPos = true;
 
     CardView batteryCard;
+    public static int battery =0;
+    TextView batteryText;
+    Button bt_kickLend;
 
-    //    private SensorManager mSensorManager;
-//    private Sensor mAccelerometer;
-//    private Sensor mMagnetometer;
-//    private float[] mLastAccelerometer = new float[3];
-//    private float[] mLastMagnetometer = new float[3];
-//    private boolean mLastAccelerometerSet = false;
-//    private boolean mLastMagnetometerSet = false;
-//    private float[] mR = new float[9];
-//    private float[] mOrientation = new float[3];
-//    private float mCurrentDegree = 0f;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        lendRequest(UserInfo.info.getUserid());
+        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+            @Override
+            public void onCompleteLogout() {
+
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         batteryCard = findViewById(R.id.main_battery_cardview);
+        batteryText = findViewById(R.id.main_battery_text);
+        bt_kickLend = findViewById(R.id.main_lend_button);
         //kakao 해시키가져옴
         getAppKeyHash();
         if(AppHelper.requestQueue == null)
@@ -103,9 +115,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
-//        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-//        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         //현위치 다시찾기
         findViewById(R.id.main_gps_imageButton).setOnClickListener(new View.OnClickListener() {
@@ -114,6 +123,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(mCurPos != null){
                     mnaverMap.setCameraPosition(new CameraPosition(mCurPos, 17));
                 }
+
+                //킥보드 배터리 양체크 통신
+                if(UserInfo.info.getKickid() != -1){
+                    batteryRequest(UserInfo.info.getKickid());
+
+                }
+            }
+        });
+
+        //반납버튼
+        bt_kickLend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService();
+                lendRequest(UserInfo.info.getUserid());
             }
         });
     }
@@ -125,54 +149,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //로그인상태와 로그아웃상태 변경
         loginButtonChange();
 
-        //센서 등록
-//        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-//        mSensorManager.registerListener( this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-
+        //킥보드 배터리 양체크 통신
         if(UserInfo.info.getKickid() != -1){
             batteryCard.setVisibility(View.VISIBLE);
-            /*
-            킥보드 배터리 양체크 통신, 반납하기버튼
-             */
+            batteryRequest(UserInfo.info.getKickid());
+           // stopService();
+            startService();
+
         }else{
             batteryCard.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //센서반납
-//        mSensorManager.unregisterListener( this, mAccelerometer);
-//        mSensorManager.unregisterListener( this, mMagnetometer);
-    }
-
-    //방위각 체크하기위한 센서
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-//        if(event.sensor == mAccelerometer){
-//            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
-//            mLastAccelerometerSet = true;
-//        }else if(event.sensor == mMagnetometer){
-//            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
-//            mLastMagnetometerSet = true;
-//        }
-//        if(mLastAccelerometerSet && mLastMagnetometerSet){
-//            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
-//            float azimuthinDegress = (int) (Math.toDegrees(SensorManager.getOrientation(mR, mOrientation)[0])+360)%360;
-//            mCurrentDegree = azimuthinDegress;
-//            if (mnaverMap != null){
-//                mnaverMap.getLocationOverlay().setBearing(mCurrentDegree);
-//            }
-//        }
-    }
-
-    //센서 인터페이스 오버라이드해줘야함
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -359,13 +348,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case 1:
                 if (UserInfo.info.isLoginState()) { //로그아웃클릭
+
+                    lendRequest(UserInfo.info.getUserid());
+
                     UserInfo.info.setLoginState(false);
                     UserInfo.info.setUserid("");
                     UserInfo.info.setPhone("");
                     UserInfo.info.setName("");
                     UserInfo.info.setGender(-1);
                     UserInfo.info.setBirth("");
-
+                    UserInfo.info.setKickid(-1);
 
                     //내부디비수정
                     AutoLoginDbHelper.openDatabase(this, "auto");
@@ -460,10 +452,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //qr코드 통신
     void qrCodeRequest(String suburl){
         // http://3.17.25.223/api/kick/borrow/{kickid}/{userid}
-        // http://3.17.25.223/api/kick/lend/{userid}
         String userid = UserInfo.info.getUserid();
-        String kickid = suburl.substring(35);
-        UserInfo.info.setKickid(Integer.parseInt(kickid));
+        final String kickid = suburl.substring(35);
         Log.d("test", "kickid: "+kickid+", "+suburl);
         String url = suburl+"/"+userid;
         StringRequest request = new StringRequest(
@@ -473,7 +463,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onResponse(String response) {
                         Log.d("test", "qrcode: "+response);
-                        startService(); //빌리기시작하면 배터리용량알려줌
+                        qrProcessResponse(response, kickid);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -486,6 +477,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //자동캐싱잇는경우 이전결과 그대로보여짐
         request.setShouldCache(false);  //새로요청해서 결과보여줌
         AppHelper.requestQueue.add(request);
+    }
+
+    //json 파싱
+    public void qrProcessResponse(String response, String kickid){
+
+        Gson gson = new Gson();
+        BatteryResult qrResult = gson.fromJson(response, BatteryResult.class);
+        if(qrResult.result == 777){
+
+            UserInfo.info.setKickid(Integer.parseInt(kickid));
+            Log.d("test", "qrcode kickid:"+Integer.parseInt((kickid)));
+            batteryCard.setVisibility(View.VISIBLE);
+            battery = qrResult.battery;
+            batteryText.setText("남은 배터리: "+qrResult.battery+"%");
+
+            startService(); //빌리기시작하면 배터리용량알려줌
+        }else if(qrResult.result == 804){
+            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
+            adbuilder.setMessage("이미 대여중인 킥보드입니다.")
+                    .setCancelable(false)
+                    .setIcon(R.drawable.danbeelogoj)
+                    .setPositiveButton("확인", null)
+                    .show();
+        }else {
+            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
+            adbuilder.setMessage("알 수 없는 오류가 발생했습니다. 다시 시도해주세요")
+                    .setCancelable(false)
+                    .setIcon(R.drawable.danbeelogoj)
+                    .setPositiveButton("확인", null)
+                    .show();
+        }
     }
 
     //로그인 로그아웃 버튼상태변경
@@ -513,7 +535,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //Service실행 - qr코드로 빌릴시
     public void startService(){
-        int battery = 95;
         Intent serviceIntent = new Intent(this, ShowNotificationService.class);
         serviceIntent.putExtra("battery", battery);
         ContextCompat.startForegroundService(this, serviceIntent);
@@ -560,35 +581,97 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .show();
     }
 
-    /*
-    // 회원탈퇴 처리
-    UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
-        @Override
-        public void onFailure(ErrorResult errorResult) {
-            int result = errorResult.getErrorCode();
 
-            if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
-                Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-            }
+    //킥보드 배터리 값가져오기
+    //http://3.17.25.223/api/kick/battery/get/{kickid}
+    void batteryRequest(int kickid){
+        String url = "http://3.17.25.223/api/kick/battery/get/"+kickid;
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "bettery: "+response);
+                        batteryProcessResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "bettery: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+    }
+
+    //json 파싱
+    public void batteryProcessResponse(String response){
+
+        Gson gson = new Gson();
+        BatteryResult batteryResult = gson.fromJson(response, BatteryResult.class);
+        if(batteryResult.result == 777){
+
+            battery = batteryResult.battery;
+            batteryText.setText("남은 배터리: "+battery+"%");
+            //stopService();
+            startService();
         }
+    }
 
-        @Override
-        public void onSessionClosed(ErrorResult errorResult) {
-            Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+    //킥보드반납
+    //http://3.17.25.223/api/kick/lend/{userid}
+    void lendRequest(String userid){
+        String url = "http://3.17.25.223/api/kick/lend/"+userid;
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "lend: "+response);
+                        lendProcessResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "lend: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+    }
+
+    //json 파싱
+    public void lendProcessResponse(String response){
+
+        Gson gson = new Gson();
+        DeleteResult lendresult = gson.fromJson(response, DeleteResult.class);
+        if(lendresult.result == 777){
+
+            UserInfo.info.setKickid(-1);
+            batteryCard.setVisibility(View.GONE);
+
+            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
+            adbuilder.setMessage("성공적으로 반납되었습니다.")
+                    .setCancelable(false)
+                    .setIcon(R.drawable.danbeelogoj)
+                    .setPositiveButton("확인", null)
+                    .show();
+        }else{
+            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
+            adbuilder.setMessage("정상적으로 반납되지 않았습니다. 다시 시도해주세요")
+                    .setCancelable(false)
+                    .setIcon(R.drawable.danbeelogoj)
+                    .setPositiveButton("확인", null)
+                    .show();
         }
-
-        @Override
-        public void onNotSignedUp() {
-            Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onSuccess(Long result) { }
-    });
-
-     */
-
+    }
 
 }

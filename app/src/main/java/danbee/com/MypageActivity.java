@@ -16,6 +16,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.kakao.auth.ApiErrorCode;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
@@ -68,12 +72,6 @@ public class MypageActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 userid = UserInfo.info.getUserid();
-                                UserInfo.info.setLoginState(false);
-                                UserInfo.info.setUserid("");
-                                UserInfo.info.setPhone("");
-                                UserInfo.info.setName("");
-                                UserInfo.info.setGender(-1);
-                                UserInfo.info.setBirth("");
 
                                 //내부디비수정
                                 AutoLoginDbHelper.openDatabase(MypageActivity.this, "auto");
@@ -82,6 +80,33 @@ public class MypageActivity extends AppCompatActivity {
                                 AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
 
                                 deleteRequest();
+                                // 회원탈퇴 처리
+                                UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
+                                    @Override
+                                    public void onFailure(ErrorResult errorResult) {
+                                        int result = errorResult.getErrorCode();
+
+                                        if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
+                                            Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onSessionClosed(ErrorResult errorResult) {
+                                        Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onNotSignedUp() {
+                                        Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Long result) { }
+                                });
+
                             }
                         })
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -127,13 +152,25 @@ public class MypageActivity extends AppCompatActivity {
         DeleteResult deleteResult = gson.fromJson(response, DeleteResult.class);
 
         if(deleteResult.result == 777) {
+            UserInfo.info.setLoginState(false);
+            UserInfo.info.setUserid("");
+            UserInfo.info.setPhone("");
+            UserInfo.info.setName("");
+            UserInfo.info.setGender(-1);
+            UserInfo.info.setBirth("");
+
             Toast.makeText(getApplicationContext(), "회원탈퇴가 완료 되었습니다.", Toast.LENGTH_SHORT).show();
             finish();
         }
         else {
-            Toast.makeText(getApplicationContext(), "회원탈퇴가 실패 되었습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "회원탈퇴 도중 오류가 발생하였습니다..", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
+
 }
 
 

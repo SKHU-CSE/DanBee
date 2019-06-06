@@ -224,6 +224,7 @@ public class MembershipActivity extends AppCompatActivity {
                                         finish();
                                     }
                                 })
+                                .setIcon(R.drawable.danbeelogoj)
                                 .setCancelable(false)
                                 .show();
                     }
