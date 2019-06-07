@@ -54,6 +54,8 @@ import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     CardView batteryCard;
     public static int battery =0;
     TextView batteryText;
+    TextView startTimeText;
     Button bt_kickLend;
 
     @Override
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         batteryCard = findViewById(R.id.main_battery_cardview);
         batteryText = findViewById(R.id.main_battery_text);
+        startTimeText = findViewById(R.id.main_time_text);
         bt_kickLend = findViewById(R.id.main_lend_button);
         //kakao 해시키가져옴
         getAppKeyHash();
@@ -491,6 +495,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             batteryCard.setVisibility(View.VISIBLE);
             battery = qrResult.battery;
             batteryText.setText("남은 배터리: "+qrResult.battery+"%");
+
+            Date now = new Date();
+            SimpleDateFormat format1 = new SimpleDateFormat("HH시 mm분");
+            String nowString = format1.format(now);
+            startTimeText.setText("시작 시간: "+nowString);
 
             startService(); //빌리기시작하면 배터리용량알려줌
         }else if(qrResult.result == 804){
