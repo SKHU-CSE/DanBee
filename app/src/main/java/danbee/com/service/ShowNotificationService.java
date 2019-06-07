@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.widget.RemoteViews;
 
 import danbee.com.MainActivity;
 import danbee.com.R;
@@ -31,14 +32,16 @@ public class ShowNotificationService extends Service {
         //notification 클릭시 이동할 Activity
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.service_statebar);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("단비")
                 .setContentText(battery+"%")
                 .setSmallIcon(R.drawable.danbeelogo)
                 .setContentIntent(pendingIntent)
+                .setOnlyAlertOnce(true)
                 .build();
+
+
 
         startForeground(1, notification);
 

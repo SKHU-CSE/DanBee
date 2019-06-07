@@ -8,9 +8,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -54,12 +51,16 @@ import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.security.MessageDigest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
 import danbee.com.kickdata.BatteryResult;
+import danbee.com.kickdata.BorrowResult;
+import danbee.com.logindata.UserStateResult;
 import danbee.com.service.ShowNotificationService;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -81,13 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        lendRequest(UserInfo.info.getUserid());
-        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-            @Override
-            public void onCompleteLogout() {
 
-            }
-        });
     }
 
     @Override
@@ -140,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bt_kickLend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopService();
+
                 lendRequest(UserInfo.info.getUserid());
             }
         });
@@ -156,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //킥보드 배터리 양체크 통신
         if(UserInfo.info.getKickid() != -1){
             batteryCard.setVisibility(View.VISIBLE);
-            batteryRequest(UserInfo.info.getKickid());
+            checkUserState(UserInfo.info.getUserid());
            // stopService();
             startService();
 
@@ -353,8 +348,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case 1:
                 if (UserInfo.info.isLoginState()) { //로그아웃클릭
 
-                    lendRequest(UserInfo.info.getUserid());
-
                     UserInfo.info.setLoginState(false);
                     UserInfo.info.setUserid("");
                     UserInfo.info.setPhone("");
@@ -375,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .setCancelable(false)
                             .show();
                     stopService();
+                    batteryCard.setVisibility(View.GONE);
                     loginButtonChange();
                     //소셜로그인 로그아웃
                     UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
@@ -385,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     });
                 } else { //로그인클릭
                     intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, 100);
                 }
                 break;
             case 2:
@@ -439,14 +433,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //login activity result
+        if (requestCode == 100){
+            if(resultCode == RESULT_CANCELED){
+                if(UserInfo.info != null || !UserInfo.info.getUserid().equals("")) {
+                    checkUserState(UserInfo.info.getUserid());  //껏다키는경우 빌린상태 체크
+
+                }
+            }
+        }
+
+
         //qr코드 결과값
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+               // Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 qrCodeRequest(result.getContents());
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -487,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void qrProcessResponse(String response, String kickid){
 
         Gson gson = new Gson();
-        BatteryResult qrResult = gson.fromJson(response, BatteryResult.class);
+        BorrowResult qrResult = gson.fromJson(response, BorrowResult.class);
         if(qrResult.result == 777){
 
             UserInfo.info.setKickid(Integer.parseInt(kickid));
@@ -496,10 +502,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             battery = qrResult.battery;
             batteryText.setText("남은 배터리: "+qrResult.battery+"%");
 
-            Date now = new Date();
-            SimpleDateFormat format1 = new SimpleDateFormat("HH시 mm분");
-            String nowString = format1.format(now);
-            startTimeText.setText("시작 시간: "+nowString);
+            String start = qrResult.time;
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date startTime = format1.parse(start);
+                Calendar c = Calendar.getInstance();
+                c.setTime(startTime);
+
+                int m = c.get(Calendar.MINUTE);
+                int h = c.get(Calendar.HOUR_OF_DAY);
+                startTimeText.setText("시작 시간: "+ h + "시" + m + "분");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
 
             startService(); //빌리기시작하면 배터리용량알려줌
         }else if(qrResult.result == 804){
@@ -666,7 +682,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             UserInfo.info.setKickid(-1);
             batteryCard.setVisibility(View.GONE);
-
+            stopService();
             AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
             adbuilder.setMessage("성공적으로 반납되었습니다.")
                     .setCancelable(false)
@@ -680,6 +696,65 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .setIcon(R.drawable.danbeelogoj)
                     .setPositiveButton("확인", null)
                     .show();
+        }
+    }
+
+    //껏다키는경우 다시체크
+    public void checkUserState(String userid) {
+        String url = "http://3.17.25.223/api/user/state/"+userid;
+        Log.d("test", "checkuser: "+url);
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "userState: "+response);
+                        checkStateProcessResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "userState: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+    }
+
+
+    //json 파싱
+    public void checkStateProcessResponse(String response){
+
+        Gson gson = new Gson();
+        UserStateResult userStateResult = gson.fromJson(response, UserStateResult.class);
+        if(userStateResult.result == 777){
+            if(userStateResult.kickid != -1){
+
+                UserInfo.info.setKickid(userStateResult.kickid);
+                batteryCard.setVisibility(View.VISIBLE);
+
+                String start = userStateResult.time;
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Date startTime = format1.parse(start);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(startTime);
+
+                    int m = c.get(Calendar.MINUTE);
+                    int h = c.get(Calendar.HOUR_OF_DAY);
+
+                    startTimeText.setText("시작 시간: "+ h + "시" + m + "분");
+                    batteryRequest(UserInfo.info.getKickid());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
         }
     }
 

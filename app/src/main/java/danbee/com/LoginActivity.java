@@ -309,7 +309,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
                         Log.d("test", "name: " + name + " email: " + email + " gender: " + gender + " birth: " + birth);
+
+                        setResult(RESULT_CANCELED);
                         finish();
+
                     }
                 }
 
