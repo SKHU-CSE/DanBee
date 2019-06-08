@@ -32,7 +32,7 @@ import danbee.com.kickdata.BatteryResult;
 import static danbee.com.App.CHANNEL_ID;
 
 public class ShowNotificationService extends Service {
-    Timer timer = new Timer();
+    Timer timer;
     int battery;
     int kickid;
     Notification notification;
@@ -63,8 +63,10 @@ public class ShowNotificationService extends Service {
 
         startForeground(1, notification);
         //10초마다 반복통신
-        timer.schedule(requestTimer,0, 10000);
-
+        if(timer == null) {
+            timer = new Timer();
+            timer.schedule(requestTimer, 0, 10000);
+        }
 
         //startForeground 안할시 몇분후 서비스종료됨
 
@@ -97,6 +99,8 @@ public class ShowNotificationService extends Service {
     //킥보드 배터리 값가져오기
     //http://3.17.25.223/api/kick/battery/get/{kickid}
     void batteryRequest(int kickid){
+        if (kickid == -1)
+            return;
         String url = "http://3.17.25.223/api/kick/battery/get/"+kickid;
         Log.d("test", "serviceurl:"+url);
         StringRequest request = new StringRequest(

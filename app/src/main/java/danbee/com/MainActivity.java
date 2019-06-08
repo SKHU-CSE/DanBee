@@ -642,7 +642,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             battery = batteryResult.battery;
             batteryText.setText("남은 배터리: "+battery+"%");
-            //stopService();
+
             startService();
         }
     }
