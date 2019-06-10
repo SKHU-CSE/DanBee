@@ -53,6 +53,7 @@ import com.nightonke.boommenu.BoomMenuButton;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -60,11 +61,14 @@ import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
 import danbee.com.kickdata.BatteryResult;
 import danbee.com.kickdata.BorrowResult;
+import danbee.com.kickgpsdata.GpsData;
+import danbee.com.kickgpsdata.GpsResult;
 import danbee.com.logindata.UserStateResult;
 import danbee.com.service.ShowNotificationService;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
+    ArrayList<Marker> markers = new ArrayList<Marker>();
     NaverMap mnaverMap;
     LatLng mCurPos;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -115,14 +119,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
 
-        //현위치 다시찾기
+        //새로고침버튼 현위치 다시찾기
         findViewById(R.id.main_gps_imageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mCurPos != null){
                     mnaverMap.setCameraPosition(new CameraPosition(mCurPos, 17));
                 }
-
+                kickGpsRequest();
                 //킥보드 배터리 양체크 통신
                 if(UserInfo.info.getKickid() != -1){
                     batteryRequest(UserInfo.info.getKickid());
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //킥보드 배터리 양체크 통신
         if(UserInfo.info.getKickid() != -1){
             batteryCard.setVisibility(View.VISIBLE);
-            checkUserState(UserInfo.info.getUserid());
+            checkUserStateRequest(UserInfo.info.getUserid());
            // stopService();
             startService();
 
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mnaverMap = naverMap;
         naverMap.setLocationSource(locationSource); //현위치
         naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
-
+        kickGpsRequest();
         // 위치(위도,경도) 객체
         LatLng maker_location = new LatLng(37.487936, 126.825071);
 
@@ -203,32 +207,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-        marker = new Marker(); //마커 생성
-        marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
-        marker.setWidth(150);
-        marker.setHeight(150);
-        marker.setPosition(maker_location); //마커 위치설정
-        marker.setMap(naverMap); //마커 표시 (보여짐)
+//        marker = new Marker(); //마커 생성
+//        marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
+//        marker.setWidth(150);
+//        marker.setHeight(150);
+//        marker.setPosition(maker_location); //마커 위치설정
+//        marker.setMap(naverMap); //마커 표시 (보여짐)
 
 
-        //마커누를때 뜨는정보창
-        final InfoWindow infoWindow = new InfoWindow();
-        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
-            @NonNull
-            @Override
-            public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                return "정보 창 내용";
-            }
-        });
 
 
-        marker.setOnClickListener(new Overlay.OnClickListener() {   //지도에서 마커 클릭했을때 이벤트
-            @Override
-            public boolean onClick(@NonNull Overlay overlay) {
-                infoWindow.open(marker); //정보창 내용과 마커 연결
-                return false;
-            }
-        });
 
 
 //
@@ -438,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (requestCode == 100){
             if(resultCode == RESULT_CANCELED){
                 if(UserInfo.info != null || !UserInfo.info.getUserid().equals("")) {
-                    checkUserState(UserInfo.info.getUserid());  //껏다키는경우 빌린상태 체크
+                    checkUserStateRequest(UserInfo.info.getUserid());  //껏다키는경우 빌린상태 체크
 
                 }
             }
@@ -700,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //껏다키는경우 다시체크
-    public void checkUserState(String userid) {
+    public void checkUserStateRequest(String userid) {
         String url = "http://3.17.25.223/api/user/state/"+userid;
         Log.d("test", "checkuser: "+url);
         StringRequest request = new StringRequest(
@@ -757,5 +745,79 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     }
+
+    //껏다키는경우 다시체크
+    public void kickGpsRequest() {
+        String url = "http://3.17.25.223/api/kick/gps/get";
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "kickgps: "+response);
+                        kickGpsProcessResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "kickgps: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+    }
+
+    //json 파싱
+    public void kickGpsProcessResponse(String response){
+
+        //마커삭제
+        for (Marker mark : markers){
+            mark.setMap(null);
+        }
+        markers.clear();
+
+        Gson gson = new Gson();
+        GpsResult gpsResult = gson.fromJson(response, GpsResult.class);
+        if(gpsResult.result == 777){
+
+            for( GpsData object : gpsResult.data){
+                marker = new Marker();
+                marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
+                marker.setWidth(150);
+                marker.setHeight(150);
+
+                LatLng maker_location = new LatLng(Double.parseDouble(object.lat), Double.parseDouble(object.lng));
+                marker.setPosition(maker_location); //마커 위치설정
+                marker.setMap(this.mnaverMap); //마커 표시 (보여짐)
+
+                //마커누를때 뜨는정보창
+                final InfoWindow infoWindow = new InfoWindow();
+                infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
+                    @NonNull
+                    @Override
+                    public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                        return "정보 창 내용";
+                    }
+                });
+
+                marker.setOnClickListener(new Overlay.OnClickListener() {   //지도에서 마커 클릭했을때 이벤트
+                    @Override
+                    public boolean onClick(@NonNull Overlay overlay) {
+                        infoWindow.open(marker); //정보창 내용과 마커 연결
+                        return false;
+                    }
+                });
+
+                markers.add(marker);
+            }
+
+
+        }
+    }
+
 
 }
