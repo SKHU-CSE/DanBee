@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 
 import danbee.com.finddata.FinduserData;
 import danbee.com.signupdata.UserIdCheckResult;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class ChangePwActivity extends AppCompatActivity {
 
@@ -90,13 +92,50 @@ public class ChangePwActivity extends AppCompatActivity {
 
         //비밀번호 변경 실패
         if (changeResult.result == 404) {
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
+            final PrettyDialog prettyDialog = new PrettyDialog(activity);
+            prettyDialog
+                    .setTitle("알림")
+                    .setMessage("변경도중 오류가 발생하였습니다.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",                    // button text
+                            R.color.pdlg_color_black,        // button text color
+                            R.color.pdlg_color_yellow,        // button background color
+                            new PrettyDialogCallback() {        // button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
             adbuilder.setTitle("변경도중 오류가 발생하였습니다.")
                     .setPositiveButton("확인", null)
                     .setCancelable(false)
-                    .show();
+                    .show();*/
         } else {
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(activity);
+            final PrettyDialog prettyDialog2 = new PrettyDialog(activity);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("비밀번호 변경이 완료되었습니다.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",                    // button text
+                            R.color.pdlg_color_black,        // button text color
+                            R.color.pdlg_color_yellow,        // button background color
+                            new PrettyDialogCallback() {        // button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    finish();
+                                }
+                            }
+                    )
+                    .show();
+
+
+            /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(activity);
             adbuilder.setTitle("비밀번호 변경이 완료되었습니다.")
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
@@ -105,7 +144,7 @@ public class ChangePwActivity extends AppCompatActivity {
                         }
                     })
                     .setCancelable(false)
-                    .show();
+                    .show();*/
 
         }
 

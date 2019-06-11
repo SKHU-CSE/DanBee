@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,8 @@ import com.google.gson.Gson;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class MypageActivity extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class MypageActivity extends AppCompatActivity {
         TextView id = (TextView) findViewById(R.id.mypageitem_tv_id);
         TextView birth = (TextView) findViewById(R.id.mypageitem_tv_birth);
         TextView phone = (TextView) findViewById(R.id.mypageitem_tv_phone);
-        TextView changepassword = (TextView) findViewById(R.id.mypageitem_tv_changepassword);
+        ImageView changepassword = (ImageView) findViewById(R.id.mypageitem_iv_changepassword);
         TextView deleteaccount = (TextView) findViewById(R.id.mypageitem_tv_deleteaccount);
 
 
@@ -59,7 +62,54 @@ public class MypageActivity extends AppCompatActivity {
         deleteaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 탈퇴하기 다이알로그 뜨고 확인하면 탈퇴완료 or 취소하면 뒤돌아가기
-                AlertDialog.Builder adbuilder = new AlertDialog.Builder(MypageActivity.this);
+                final PrettyDialog prettyDialog = new PrettyDialog(MypageActivity.this);
+                prettyDialog
+                        .setTitle("알림")
+                        .setMessage("정말 탈퇴하시겠습니까?")
+                        .setIcon(R.drawable.danbeelogoj)
+                        .addButton(
+                                "확인",					// button text
+                                R.color.pdlg_color_black,		// button text color
+                                R.color.pdlg_color_yellow,		// button background color
+                                new PrettyDialogCallback() {		// button OnClick listener
+                                    @Override
+                                    public void onClick() {
+                                        userid = UserInfo.info.getUserid();
+                                        UserInfo.info.setLoginState(false);
+                                        UserInfo.info.setUserid("");
+                                        UserInfo.info.setPhone("");
+                                        UserInfo.info.setName("");
+                                        UserInfo.info.setGender(-1);
+                                        UserInfo.info.setBirth("");
+
+                                        //내부디비수정
+                                        AutoLoginDbHelper.openDatabase(MypageActivity.this, "auto");
+                                        AutoLoginDbHelper.deleteLog();
+                                        AutoLoginDbHelper.createAutoTable();
+                                        AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
+
+                                        deleteRequest();
+
+                                        prettyDialog.dismiss();
+                                    }
+                                }
+                        )
+                        .addButton(
+                                "취소",
+                                R.color.pdlg_color_black,		// button text color
+                                R.color.pdlg_color_yellow,
+                                new PrettyDialogCallback() {
+                                    @Override
+                                    public void onClick() {
+                                        prettyDialog.dismiss();
+                                    }
+                                }
+                        )
+                        .show();
+
+
+
+                /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(MypageActivity.this);
                 adbuilder.setTitle("알림")
                         .setMessage("정말 탈퇴하시겠습니까?")
                         .setCancelable(false)
@@ -90,7 +140,7 @@ public class MypageActivity extends AppCompatActivity {
                                 // 다이알로그만 없어지게하기(그냥냅두면 될듯), finish는 액티비티가 종료라 메인화면으로 나가짐
                             }
                         })
-                        .show();
+                        .show();*/
             }
         });
     }
