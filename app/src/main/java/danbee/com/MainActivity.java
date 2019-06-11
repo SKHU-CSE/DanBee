@@ -62,6 +62,8 @@ import danbee.com.kickdata.BatteryResult;
 import danbee.com.kickdata.BorrowResult;
 import danbee.com.logindata.UserStateResult;
 import danbee.com.service.ShowNotificationService;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
@@ -362,11 +364,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     AutoLoginDbHelper.createAutoTable();
                     AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
 
-                    AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
+                    final PrettyDialog prettyDialog = new PrettyDialog(this);
+                            prettyDialog
+                            .setTitle("알림")
+                            .setMessage("로그아웃 되었습니다.")
+                            .setIcon(R.drawable.danbeelogoj)
+                            .addButton(
+                                    "확인",					// button text
+                                    R.color.pdlg_color_black,		// button text color
+                                    R.color.pdlg_color_yellow,		// button background color
+                                    new PrettyDialogCallback() {        // button OnClick listener
+                                        @Override
+                                        public void onClick() {
+                                            prettyDialog.dismiss();
+                                        }
+                                    }
+                            )
+                            .show();
+
+                    /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
                     adbuilder.setTitle("로그아웃 되었습니다.")
                             .setPositiveButton("확인", null)
                             .setCancelable(false)
-                            .show();
+                            .show();*/
+
                     stopService();
                     batteryCard.setVisibility(View.GONE);
                     loginButtonChange();
@@ -591,9 +612,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //로그인 안했을시 나타나는 다이얼로그
     public void loginCheckMessage() {
-        AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
+        final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+        prettyDialog2
+                .setTitle("알림")
+                .setMessage("로그인을 먼저 해주세요.")
+                .setIcon(R.drawable.danbeelogoj)
+                .addButton(
+                        "확인",					// button text
+                        R.color.pdlg_color_black,		// button text color
+                        R.color.pdlg_color_yellow,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
+                                Intent intent = new Intent(MainActivity.this , LoginActivity.class);
+                                startActivity(intent);
+                                prettyDialog2.dismiss();
+                            }
+                        }
+                )
+                .show();
+
+        /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
         adbuilder.setTitle("알림")
-                .setMessage("로그인을 하시오.")
+                .setMessage("로그인을 먼저 해주세요.")
                 .setCancelable(false)
                 .setIcon(R.drawable.danbeelogoj)
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -603,7 +644,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(intent);
                     }
                 })
-                .show();
+                .show();*/
     }
 
 

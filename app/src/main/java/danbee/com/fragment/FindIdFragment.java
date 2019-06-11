@@ -29,6 +29,8 @@ import danbee.com.R;
 import danbee.com.UserInfo;
 import danbee.com.finddata.FinduserData;
 import danbee.com.logindata.LoginResult;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class FindIdFragment extends Fragment {
 
@@ -92,18 +94,54 @@ public class FindIdFragment extends Fragment {
 
         //아이디찾기 실패
         if (finduserResult.result == 404) {
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(getActivity());
+            final PrettyDialog prettyDialog = new PrettyDialog(getActivity());
+            prettyDialog
+                    .setTitle("알림")
+                    .setMessage("아이디가 존재하지 않습니다.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(getActivity());
             adbuilder.setTitle("아이디가 존재하지 않습니다.")
                     .setPositiveButton("확인", null)
                     .setCancelable(false)
-                    .show();
+                    .show();*/
         } else {
             String id = finduserResult.data;
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(getActivity());
+            final PrettyDialog prettyDialog2 = new PrettyDialog(getActivity());
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("아이디 : \" + id ")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(getActivity());
             adbuilder.setTitle("아이디 : " + id )
                     .setPositiveButton("확인", null)
                     .setCancelable(false)
-                    .show();
+                    .show();*/
         }
 
     }

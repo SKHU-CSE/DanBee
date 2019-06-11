@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "danbee.com"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -39,5 +39,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    implementation  'com.github.mjn1369:prettydialog:1.0.4'
 
 }
