@@ -128,9 +128,8 @@ public class QuestionFragment extends Fragment {
             for(int i=datasize-1; i>=0; i--){
                 String title = questionResult.data.get(i).title;
                 String userid = questionResult.data.get(i).userid;
-                String content = questionResult.data.get(i).question_content;
-                String answer = questionResult.data.get(i).answer_content;
-                items.add(new QuestionItem(userid,title,content,answer));
+                String content = questionResult.data.get(i).content;
+                items.add(new QuestionItem(userid,title,content));
             }
 
             adapter.notifyDataSetChanged();

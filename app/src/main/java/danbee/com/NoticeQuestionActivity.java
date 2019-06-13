@@ -20,13 +20,22 @@ public class NoticeQuestionActivity extends AppCompatActivity {
 
     final int WirteSuccessCode = 777;
 
+    NoticeFragment noticeFragment;
+    @Override
+    public void onBackPressed() {
+        if (noticeFragment.backButtonState()){ //공지창닫힌상태
+            super.onBackPressed();
+        }else {
+            return;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_question);
 
-        final NoticeFragment noticeFragment = new NoticeFragment();
+        noticeFragment = new NoticeFragment();
         final QuestionFragment questionFragment = new QuestionFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.noticeQuestion_frameLayout, noticeFragment).commit();
 

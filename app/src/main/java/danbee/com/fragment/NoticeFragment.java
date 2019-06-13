@@ -154,6 +154,14 @@ public class NoticeFragment extends Fragment {
         }
     }
 
+    public boolean backButtonState(){
+        if (this.isPageShow){ //열린상태
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();

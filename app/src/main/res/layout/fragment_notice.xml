@@ -29,9 +29,11 @@
             android:id="@+id/notice_detail_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="클릭시 창이 닫힙니다."
+            android:text="화면 클릭시 창이 닫힙니다."
             android:layout_centerHorizontal="true"
-            android:textColor="#cccccc"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#856400"
             />
         <RelativeLayout
             android:layout_width="match_parent"
