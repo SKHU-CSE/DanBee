@@ -244,20 +244,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         boombt = findViewById(R.id.bmb);
 
         for (int i = 0; i < boombt.getPiecePlaceEnum().pieceNumber(); i++) {
-            TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder()
-                    .normalImageRes(buttonImage(i))
-                    .normalText(buttonText(i))
-                    .listener(new OnBMClickListener() {
-                        @Override
-                        public void onBoomButtonClick(int index) {
-                            btClickIntent(index);
-                        }
-                    })
-                    .normalTextColor(Color.BLACK)
-                    .normalColorRes(btColorSet(i))
-                    .imagePadding(new Rect(15, 10, 15, 40));
+            if( i==3 ){
+                TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder()
+                        .normalImageRes(buttonImage(i))
+                        .normalText(buttonText(i))
+                        .listener(new OnBMClickListener() {
+                            @Override
+                            public void onBoomButtonClick(int index) {
+                                btClickIntent(index);
+                            }
+                        })
+                        .normalTextColor(Color.BLACK)
+                        .normalColorRes(btColorSet(i))
+                        .imagePadding(new Rect(0, 0, 0, 10));
+                boombt.addBuilder(builder);
 
-            boombt.addBuilder(builder);
+            }else {
+                TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder()
+                        .normalImageRes(buttonImage(i))
+                        .normalText(buttonText(i))
+                        .listener(new OnBMClickListener() {
+                            @Override
+                            public void onBoomButtonClick(int index) {
+                                btClickIntent(index);
+                            }
+                        })
+                        .normalTextColor(Color.BLACK)
+                        .normalColorRes(btColorSet(i))
+                        .imagePadding(new Rect(15, 10, 15, 40));
+                boombt.addBuilder(builder);
+            }
         }
     }
 
@@ -426,15 +442,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //버튼색 지정
     int btColorSet(int index){
         switch (index){
-            case 0:
+
             case 6:
-                return R.color.danbeeBomButton1;
             case 1:
-            case 5:
-                return R.color.danbeeBomButton2;
             case 2:
+            case 0:
+            case 5:
             case 4:
-                return R.color.danbeeBomButton3;
+                return R.color.danbeeBomButton7;
+
+            case 3:
+                return R.color.danbeeBomButton8;
             default:
                 return R.color.colorPrimaryDark;
         }

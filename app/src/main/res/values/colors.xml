@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#FFC60B</color>
+    <color name="colorPrimaryDark">#F2D5A0</color>
     <color name="colorAccent">#D81B60</color>
     <color name="iosTint">#007AFF</color>
-    <color name="danbeeBomButton1">#FEFFDB</color>
-    <color name="danbeeBomButton2">#E6FFFE</color>
-    <color name="danbeeBomButton3">#F8A978</color>
+    <color name="danbeeBomButton0">#FEFFDB</color>
+    <!--<color name="danbeeBomButton6">#E6FFFE</color>-->
+    <!--<color name="danbeeBomButton7">#F8A978</color>-->
+
+    <color name="danbeeBomButton1">#F2DC99</color>
+    <color name="danbeeBomButton2">#F2D06B</color>
+    <color name="danbeeBomButton3">#F2CD13</color>
+    <color name="danbeeBomButton4">#F2B705</color>
+    <color name="danbeeBomButton5">#ffd428</color>
+
+    <color name="danbeeBomButton7">#F2D5A0</color>
+    <color name="danbeeBomButton8">#736555</color>
 
 </resources>

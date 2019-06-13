@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,11 +26,9 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.util.ArrayList;
 
 import danbee.com.AppHelper;
-import danbee.com.NoticeItem;
-import danbee.com.QuestionItem;
-import danbee.com.QuestionRecyclerViewAdapter;
+import danbee.com.FaqItem;
+import danbee.com.FaqRecyclerViewAdapter;
 import danbee.com.R;
-import danbee.com.noticedata.NoticeResult;
 import danbee.com.questiondata.QuestionResult;
 
 
@@ -40,8 +37,8 @@ public class QuestionFragment extends Fragment {
     ImageView arrow;
     RecyclerView recyclerView;
     Context context;
-    QuestionRecyclerViewAdapter adapter;
-    ArrayList<QuestionItem> items = new ArrayList<QuestionItem>();
+    FaqRecyclerViewAdapter adapter;
+    ArrayList<FaqItem> items = new ArrayList<FaqItem>();
 
     @Override
     public void onAttach(Context context) {
@@ -80,7 +77,7 @@ public class QuestionFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new QuestionRecyclerViewAdapter((Activity)context, items);
+        adapter = new FaqRecyclerViewAdapter((Activity)context, items);
         recyclerView.setAdapter(adapter);
 
         sendRequest();
@@ -129,7 +126,8 @@ public class QuestionFragment extends Fragment {
                 String title = questionResult.data.get(i).title;
                 String userid = questionResult.data.get(i).userid;
                 String content = questionResult.data.get(i).content;
-                items.add(new QuestionItem(userid,title,content));
+                items.add(new FaqItem(userid,title,content));
+
             }
 
             adapter.notifyDataSetChanged();
