@@ -33,6 +33,7 @@ import danbee.com.NoticeItem;
 import danbee.com.NoticeRecyclerViewAdapter;
 import danbee.com.NoticeWirteActivity;
 import danbee.com.R;
+import danbee.com.UserInfo;
 import danbee.com.noticedata.NoticeResult;
 
 public class NoticeFragment extends Fragment {
@@ -107,6 +108,11 @@ public class NoticeFragment extends Fragment {
         });
         //작성하기 버튼
         Button bt_write = rootView.findViewById(R.id.noticewrite_bt_write);
+        if(UserInfo.info.getUserid() != null) { // 작성하기 버튼 보이기
+            if(UserInfo.info.getUserid().equals("hj") || UserInfo.info.getUserid().equals("namsoo" ) || UserInfo.info.getUserid().equals("jaehee") ) {
+                bt_write.setVisibility(View.VISIBLE);
+            }
+        }
         bt_write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +123,7 @@ public class NoticeFragment extends Fragment {
 
         return rootView;
     }
+
 
     //초기 설정
     void set(ViewGroup rootView){

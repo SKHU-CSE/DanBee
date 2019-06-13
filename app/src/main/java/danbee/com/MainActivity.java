@@ -345,6 +345,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     loginCheckMessage();
                     return;
                 }
+                if (UserInfo.info.getKickid() != -1) {
+                    final PrettyDialog prettyDialog = new PrettyDialog(this);
+                    prettyDialog
+                            .setTitle("알림")
+                            .setMessage("이미 킥보드를 사용중입니다.")
+                            .setIcon(R.drawable.danbeelogoj)
+                            .addButton(
+                                    "확인",					// button text
+                                    R.color.pdlg_color_black,		// button text color
+                                    R.color.pdlg_color_yellow,		// button background color
+                                    new PrettyDialogCallback() {        // button OnClick listener
+                                        @Override
+                                        public void onClick() {
+                                            prettyDialog.dismiss();
+                                        }
+                                    }
+                            )
+                            .show();
+                }
                 //qr코드 스캐너
                 new IntentIntegrator(this)
                         .setPrompt("QR코드를 찍어주세요")
@@ -353,7 +372,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case 1:
                 if (UserInfo.info.isLoginState()) { //로그아웃클릭
-
                     UserInfo.info.setLoginState(false);
                     UserInfo.info.setUserid("");
                     UserInfo.info.setPhone("");
@@ -368,8 +386,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     AutoLoginDbHelper.createAutoTable();
                     AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
 
-                    final PrettyDialog prettyDialog = new PrettyDialog(this);
-                            prettyDialog
+                    final PrettyDialog prettyDialog1 = new PrettyDialog(this);
+                            prettyDialog1
                             .setTitle("알림")
                             .setMessage("로그아웃 되었습니다.")
                             .setIcon(R.drawable.danbeelogoj)
@@ -380,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     new PrettyDialogCallback() {        // button OnClick listener
                                         @Override
                                         public void onClick() {
-                                            prettyDialog.dismiss();
+                                            prettyDialog1.dismiss();
                                         }
                                     }
                             )
@@ -416,7 +434,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 break;
             case 3:
-
+                intent = new Intent(this, DanbeeActivity.class);
+                startActivity(intent);
                 break;
             case 4:
                 intent = new Intent(this, NoticeQuestionActivity.class);
