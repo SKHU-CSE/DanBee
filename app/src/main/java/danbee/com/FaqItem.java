@@ -1,13 +1,13 @@
 package danbee.com;
 
-public class QuestionItem {
+public class FaqItem {
 
     private String userid;
     private String title;
     private String content;
     private String answer="";
 
-    public QuestionItem(String userid, String title, String content, String answer){
+    public FaqItem(String userid, String title, String content, String answer){
         this.userid = userid;
         this.title = title;
         this.content=content;

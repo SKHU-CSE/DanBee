@@ -12,12 +12,12 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 
-public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.ViewHolder>  {
+public class FaqRecyclerViewAdapter extends RecyclerView.Adapter<FaqRecyclerViewAdapter.ViewHolder>  {
 
-    ArrayList<QuestionItem> items;
+    ArrayList<FaqItem> items;
     Activity context;
-    QuestionItem item;
-    public QuestionRecyclerViewAdapter (Activity context, ArrayList<QuestionItem> items){
+    FaqItem item;
+    public FaqRecyclerViewAdapter(Activity context, ArrayList<FaqItem> items){
         this.context=context;
         this.items = items;
     }
@@ -25,12 +25,12 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-       View itemView = context.getLayoutInflater().inflate(R.layout.question_item,viewGroup,false);
+       View itemView = context.getLayoutInflater().inflate(R.layout.faq_item,viewGroup,false);
        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull QuestionRecyclerViewAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull FaqRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         item = items.get(i);
         viewHolder.setItem(item);
     }
@@ -75,7 +75,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
 
         }
 
-        public void setItem(QuestionItem item){
+        public void setItem(FaqItem item){
             tv_title.setText(item.getTitle());
             tv_userid.setText(item.getUserid());
             tv_content.setText(item.getContent());
