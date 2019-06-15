@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,6 +31,7 @@ public class UserHistoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     HistoryRecyclerViewAdapter adapter;
     ArrayList<HistoryItem> items;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,7 @@ public class UserHistoryActivity extends AppCompatActivity {
         if(AppHelper.requestQueue == null)
             AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        progressBar = findViewById(R.id.history_progressBar);
         sendRequest(); //통신
 
         recyclerView = findViewById(R.id.history_recycler_view);
@@ -52,6 +56,7 @@ public class UserHistoryActivity extends AppCompatActivity {
     }
 
     void sendRequest(){
+        progressBar.setVisibility(View.VISIBLE);
         items.clear();
         String url = "http://3.17.25.223/api/history/user/"+UserInfo.info.getUserid();
         StringRequest request = new StringRequest(
@@ -92,7 +97,7 @@ public class UserHistoryActivity extends AppCompatActivity {
                 int kickid = historyResult.data.get(i).kickid;
                 items.add(new HistoryItem(sDate,eDate,kickid));
             }
-
+            progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         }
 

@@ -29,8 +29,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/noticeQuestion_frameLayout">
+        android:layout_height="match_parent"
+        android:id="@+id/noticeQuestion_frameLayout"
+        android:layout_gravity="center">
 
 
     </FrameLayout>

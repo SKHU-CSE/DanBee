@@ -28,14 +28,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GuideActivity" />
-        <activity android:name=".UserHistoryActivity" />
-        <activity android:name=".ChangePwActivity" />
+        <activity
+            android:name=".GuideActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UserHistoryActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ChangePwActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".service.ShowNotificationService" />
 
-        <activity android:name=".MypageActivity" />
-        <activity android:name=".FindUserActivity" />
+        <activity
+            android:name=".MypageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".FindUserActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
@@ -56,12 +66,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NoticeQuestionActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MembershipActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
     </application>
 

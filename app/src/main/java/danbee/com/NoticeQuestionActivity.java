@@ -26,7 +26,8 @@ public class NoticeQuestionActivity extends AppCompatActivity {
         if (noticeFragment.backButtonState()){ //공지창닫힌상태
             super.onBackPressed();
         }else {
-            return;
+            noticeFragment = new NoticeFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.noticeQuestion_frameLayout,noticeFragment).commit();
         }
     }
 

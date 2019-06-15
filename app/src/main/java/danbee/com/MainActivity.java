@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 lendRequest(UserInfo.info.getUserid());
             }
         });
+
     }
 
     @Override

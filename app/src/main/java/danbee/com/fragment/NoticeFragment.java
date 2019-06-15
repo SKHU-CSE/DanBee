@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class NoticeFragment extends Fragment {
     public boolean isPageShow = false;
     NoticeRecyclerViewAdapter adapter;
     Context context;
+    ProgressBar progressBar;
 
     @Override
     public void onAttach(Context context) {
@@ -64,6 +66,7 @@ public class NoticeFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_notice, container, false);
 
         set(rootView);
+        progressBar = rootView.findViewById(R.id.notice_fragment_progressBar);
         sendRequest(); //통신
 
         recyclerView = rootView.findViewById(R.id.notice_recycler_view);
@@ -73,6 +76,8 @@ public class NoticeFragment extends Fragment {
 
         adapter = new NoticeRecyclerViewAdapter((Activity)context, items);
         recyclerView.setAdapter(adapter);
+
+
 
         //카드뷰클릭시 이벤트
         adapter.setOnItemClickListener(new NoticeRecyclerViewAdapter.OnItemClickListener() {
@@ -178,6 +183,7 @@ public class NoticeFragment extends Fragment {
 
     //서버 통신
     void sendRequest(){
+        progressBar.setVisibility(View.VISIBLE);
         items.clear();
         String url = "http://3.17.25.223/api/notice/list";
         StringRequest request = new StringRequest(
@@ -218,7 +224,7 @@ public class NoticeFragment extends Fragment {
                 String date = noticeResult.data.get(i).time;
                 items.add(new NoticeItem(title,content,date));
             }
-
+            progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         }
     }
