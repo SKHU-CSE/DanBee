@@ -8,9 +8,6 @@
         <item name="colorAccent">@color/iosTint</item>
 
     </style>
-    <style name="SelectableItemBackground">
-        <item name="android:colorControlHighlight" tools:targetApi="lollipop">@color/danbeeBomButton0</item>
-    </style>
     <style name="Theme.Transparent" parent="android:Theme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>

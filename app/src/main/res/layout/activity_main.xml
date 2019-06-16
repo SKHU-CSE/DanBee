@@ -74,13 +74,13 @@
         android:id="@+id/main_gps_imageButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:padding="5dp"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="150dp"
         android:layout_marginRight="55dp"
         android:src="@drawable/refresh"
         android:scaleType="fitXY"
-        android:background="?selectableItemBackgroundBorderless"
-        android:theme="@style/SelectableItemBackground"
+        android:background="@drawable/ripple"
         />
 
     <com.nightonke.boommenu.BoomMenuButton
