@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
         kickGpsRequest();
         // 위치(위도,경도) 객체
-        LatLng maker_location = new LatLng(37.487936, 126.825071);
+       // LatLng maker_location = new LatLng(37.487936, 126.825071);
 
         //위치변경시 콜백
         naverMap.addOnLocationChangeListener(new NaverMap.OnLocationChangeListener() {
@@ -216,11 +216,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        marker.setHeight(150);
 //        marker.setPosition(maker_location); //마커 위치설정
 //        marker.setMap(naverMap); //마커 표시 (보여짐)
-
-
-
-
-
 
 //
 //        // 카메라 위치와 줌 조절(숫자가 클수록 확대)
@@ -885,15 +880,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //json 파싱
     public void kickGpsProcessResponse(String response){
 
-        //마커삭제
-        for (Marker mark : markers){
-            mark.setMap(null);
-        }
-        markers.clear();
+
 
         Gson gson = new Gson();
         GpsResult gpsResult = gson.fromJson(response, GpsResult.class);
         if(gpsResult.result == 777){
+
+            //마커삭제
+            for (Marker mark : markers){
+                mark.setMap(null);
+            }
+            markers.clear();
 
             for( GpsData object : gpsResult.data){
                 marker = new Marker();
