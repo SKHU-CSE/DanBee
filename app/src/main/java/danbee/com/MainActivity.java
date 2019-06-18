@@ -566,18 +566,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             startService(); //빌리기시작하면 배터리용량알려줌
         }else if(qrResult.result == 804){
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("이미 대여중인 킥보드입니다.")
-                    .setCancelable(false)
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("이미 대여중인 킥보드입니다.")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }else {
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("알 수 없는 오류가 발생했습니다. 다시 시도해주세요")
-                    .setCancelable(false)
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("알 수 없는 오류가 발생했습니다. 다시 시도해주세요")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }
     }
@@ -658,19 +680,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 )
                 .show();
 
-        /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-        adbuilder.setTitle("알림")
-                .setMessage("로그인을 먼저 해주세요.")
-                .setCancelable(false)
-                .setIcon(R.drawable.danbeelogoj)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MainActivity.this , LoginActivity.class);
-                        startActivity(intent);
-                    }
-                })
-                .show();*/
     }
 
 
@@ -750,18 +759,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             UserInfo.info.setKickid(-1);
             batteryCard.setVisibility(View.GONE);
             stopService();
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("성공적으로 반납되었습니다.")
-                    .setCancelable(false)
+
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("성공적으로 반납되었습니다.")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }else{
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("정상적으로 반납되지 않았습니다. 다시 시도해주세요")
-                    .setCancelable(false)
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("반납도중 오류가 발생하였습니다. 다시 시도해주세요")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }
     }

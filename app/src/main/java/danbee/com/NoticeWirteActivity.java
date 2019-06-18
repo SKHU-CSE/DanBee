@@ -31,6 +31,7 @@ public class NoticeWirteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_wirte);
 
+        view = findViewById(R.id.noticewrite_progress_view);
         Button bt_ok = findViewById(R.id.noticewrite_bt_ok);
         Button bt_cancel = findViewById(R.id.noticewrite_bt_cancel);
 
@@ -45,10 +46,9 @@ public class NoticeWirteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //진행중 표시 레이아웃
-                view = findViewById(R.id.noticewrite_progress_view);
+
                 view.setVisibility(View.VISIBLE);
                 view.setClickable(false);
-                ProgressBar progressBar = view.findViewById(R.id.noticewrite_progressBar);
 
                 //통신
                 writeNoticeSendRequest();
