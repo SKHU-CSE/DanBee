@@ -359,12 +359,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     }
                             )
                             .show();
+                }else {
+                    //qr코드 스캐너
+                    new IntentIntegrator(this)
+                            .setPrompt("QR코드를 찍어주세요")
+                            .setOrientationLocked(true)
+                            .initiateScan();
                 }
-                //qr코드 스캐너
-                new IntentIntegrator(this)
-                        .setPrompt("QR코드를 찍어주세요")
-                        .setOrientationLocked(true)
-                        .initiateScan();
                 break;
             case 1:
                 if (UserInfo.info.isLoginState()) { //로그아웃클릭
