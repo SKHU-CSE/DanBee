@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView startTimeText;
     Button bt_kickLend;
 
+    float dX;
+    float dY;
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -232,6 +235,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         boombt = findViewById(R.id.bmb);
 
+        //버튼 드래그 효과
+        boombt.setDraggable(true);
         for (int i = 0; i < boombt.getPiecePlaceEnum().pieceNumber(); i++) {
             if( i==3 ){
                 TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder()
@@ -912,10 +917,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 markers.add(marker);
             }
-
-
         }
     }
-
 
 }
