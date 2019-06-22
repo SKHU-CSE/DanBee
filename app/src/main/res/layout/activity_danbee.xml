@@ -1,34 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".DanbeeActivity">
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="단비 개발팀"
+            android:textSize="20dp"
+            android:padding="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/background_light_yellow"/>
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:src="@drawable/weareteam"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_horizontal"
+            app:riv_corner_radius="150dip"
+            app:riv_oval="true" />
 
 
 
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="#000000"
-    android:textSize="20dp"
-    android:text="개발자"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="0.3">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:text="개발동기"/>
+            <LinearLayout
+                android:id="@+id/linear1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:orientation="vertical"
+               >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:text="단비 뜻"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Developer"
+                    android:textColor="#000000"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="18dp"
+                    android:layout_marginBottom="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jaehee Lee"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Developer"
+                    android:textColor="#000000"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="18dp"
+                    android:layout_marginBottom="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Namsoo Kim"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/linear3"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:orientation="vertical"
+              >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Developer"
+                    android:textColor="#000000"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="18dp"
+                    android:layout_marginBottom="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hyungjun Kim"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="개발동기"
+            android:textSize="20dp"
+            android:padding="5dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/background_light_yellow"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인용 이동수단인 퍼스널 모빌리티의 인기가 올라가서 스마트 전동 킥보드를 직접 만들어 보고 이를 공유할 수 있는 플랫폼 서비스를 구현하기로 결심했습니다."
+            android:textColor="#000000"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="단비 의미"
+            android:textSize="20dp"
+            android:padding="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/background_light_yellow" />
+
+        <ImageView
+            android:layout_width="400dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/makedanbee"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="단비는 꼭 필요할 때 알맞게 내리는 비와 비(bee)의 중의적 의미를 사용하여 사용자가 필요로할 때 언제든지 사용할 수 있는 킥보드 공유 플랫폼입니다."
+            android:textColor="#000000"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
