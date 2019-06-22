@@ -1,7 +1,5 @@
 package danbee.com;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,17 +9,14 @@ import android.graphics.Rect;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -106,8 +101,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //자동로그인확인
         autoLogin();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar); //만든툴바 액션바로 설정
 
         boomMenuSet();
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -383,8 +376,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     AutoLoginDbHelper.createAutoTable();
                     AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
 
+
+
+                    stopService();
+                    batteryCard.setVisibility(View.GONE);
+                    loginButtonChange();
+                    //소셜로그인 로그아웃
+                    UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                        @Override
+                        public void onCompleteLogout() {
+
+                        }
+                    });
+
                     final PrettyDialog prettyDialog1 = new PrettyDialog(this);
-                            prettyDialog1
+                    prettyDialog1
                             .setTitle("알림")
                             .setMessage("로그아웃 되었습니다.")
                             .setIcon(R.drawable.danbeelogoj)
@@ -400,23 +406,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     }
                             )
                             .show();
-
-                    /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
-                    adbuilder.setTitle("로그아웃 되었습니다.")
-                            .setPositiveButton("확인", null)
-                            .setCancelable(false)
-                            .show();*/
-
-                    stopService();
-                    batteryCard.setVisibility(View.GONE);
-                    loginButtonChange();
-                    //소셜로그인 로그아웃
-                    UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-                        @Override
-                        public void onCompleteLogout() {
-
-                        }
-                    });
                 } else { //로그인클릭
                     intent = new Intent(this, LoginActivity.class);
                     startActivityForResult(intent, 100);
