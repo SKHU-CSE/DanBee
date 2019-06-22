@@ -18,13 +18,13 @@
         app:radius="12dp"
         app:textSize="18dp"
         app:segments="@array/notice_segment_string"
-        app:selectedBackgroundColor="#ff8b00"
+        app:selectedBackgroundColor="#f7d649"
         app:unSelectedBackgroundColor="#ffffff"
         app:selectedTextColor="#ffffff"
         app:unSelectedTextColor="#000000"
-        app:selectedStrokeColor="#ff8b00"
-        app:unSelectedStrokeColor="#ff8b00"
-        app:focusedBackgroundColor="#ffe0b2"
+        app:selectedStrokeColor="#f7d649"
+        app:unSelectedStrokeColor="#f7d649"
+        app:focusedBackgroundColor="#F9E695"
         />
 
     <FrameLayout

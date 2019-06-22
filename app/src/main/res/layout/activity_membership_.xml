@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="40dp"
+        android:padding="20dp"
         >
         <ImageView
             android:id="@+id/test"
@@ -253,26 +253,26 @@
             </RadioGroup>
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/membership_cb_agreement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/membership_gendercheck_view"
-            android:layout_marginTop="10dp"
-            android:text="모두 동의합니다"
-            android:textColor="#000000"
-            android:textSize="18dp" />
+        <!--<CheckBox-->
+            <!--android:id="@+id/membership_cb_agreement"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/membership_gendercheck_view"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:text="모두 동의합니다"-->
+            <!--android:textColor="#000000"-->
+            <!--android:textSize="18dp" />-->
 
         <Button
             android:id="@+id/membership_bt_SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_below="@id/membership_cb_agreement"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/membership_gendercheck_view"
             android:text="단비 시작하기"
             android:textSize="18dp"
             android:textColor="#000000"
-            android:background="@drawable/bt_click_orange"
+            android:background="@drawable/bt_click_yellow"
             />
 
     </RelativeLayout>

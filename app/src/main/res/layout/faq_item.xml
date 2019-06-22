@@ -54,7 +54,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#feffdb"
+            android:background="#F9E695"
             >
             <TextView
                 android:id="@+id/question_item_expand_tv_userid"
