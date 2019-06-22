@@ -29,7 +29,6 @@
         android:background="@drawable/stroke_sign_gray"
         android:padding="15dp"/>
 
-
     <Button
         android:id="@+id/findid_user_bt_id"
         android:layout_width="match_parent"
@@ -40,4 +39,5 @@
         android:textSize="18sp"
         android:textColor="#000000"
         android:background="@drawable/bt_click_orange"/>
+
 </RelativeLayout>

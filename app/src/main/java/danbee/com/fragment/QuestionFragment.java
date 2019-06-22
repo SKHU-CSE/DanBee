@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -39,7 +40,7 @@ public class QuestionFragment extends Fragment {
     Context context;
     FaqRecyclerViewAdapter adapter;
     ArrayList<FaqItem> items = new ArrayList<FaqItem>();
-
+    ProgressBar progressBar;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -80,6 +81,8 @@ public class QuestionFragment extends Fragment {
         adapter = new FaqRecyclerViewAdapter((Activity)context, items);
         recyclerView.setAdapter(adapter);
 
+        progressBar = rootView.findViewById(R.id.question_fragment_progressBar);
+
         sendRequest();
 
         return rootView;
@@ -89,6 +92,7 @@ public class QuestionFragment extends Fragment {
     //서버 통신
     void sendRequest(){
         items.clear();
+        progressBar.setVisibility(View.VISIBLE);
         String url = "http://3.17.25.223/api/question/list";
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -125,11 +129,11 @@ public class QuestionFragment extends Fragment {
             for(int i=datasize-1; i>=0; i--){
                 String title = questionResult.data.get(i).title;
                 String userid = questionResult.data.get(i).userid;
-                String content = questionResult.data.get(i).question_content;
-                String answer = questionResult.data.get(i).answer_content;
-                items.add(new FaqItem(userid,title,content,answer));
-            }
+                String content = questionResult.data.get(i).content;
+                items.add(new FaqItem(userid,title,content));
 
+            }
+            progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         }
     }

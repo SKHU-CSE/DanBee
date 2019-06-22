@@ -35,6 +35,8 @@ import com.kakao.util.exception.KakaoException;
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
 import danbee.com.logindata.LoginResult;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class LoginActivity extends AppCompatActivity {
     Activity activity;
@@ -107,12 +109,30 @@ public class LoginActivity extends AppCompatActivity {
         String id = et_id.getText().toString();
         String pw = et_pw.getText().toString();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final PrettyDialog prettyDialog = new PrettyDialog(this);
         if (id.equals("") || pw.equals("")) {
-            builder.setTitle("빈칸이 존재합니다.")
+            prettyDialog
+                    .setTitle("알림")
+                    .setMessage("빈칸이 존재합니다.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*builder.setTitle("빈칸이 존재합니다.")
                     .setPositiveButton("확인", null)
                     .setCancelable(false)
-                    .show();
+                    .show();*/
             return;
         }
 
@@ -147,11 +167,29 @@ public class LoginActivity extends AppCompatActivity {
 
         //로그인 실패
         if (loginResult.result == 404) {
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
+            final PrettyDialog prettyDialog2 = new PrettyDialog(this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("아이디 혹은 비밀번호가 다릅니다.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
             adbuilder.setTitle("아이디 혹은 비밀번호가 다릅니다.")
                     .setPositiveButton("확인", null)
                     .setCancelable(false)
-                    .show();
+                    .show();*/
         } else {
             Log.d("test", "LoginDataCount: " + loginResult.data.size());
             //user정보 저장

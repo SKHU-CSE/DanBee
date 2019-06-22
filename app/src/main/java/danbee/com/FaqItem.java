@@ -5,13 +5,11 @@ public class FaqItem {
     private String userid;
     private String title;
     private String content;
-    private String answer="";
 
-    public FaqItem(String userid, String title, String content, String answer){
+    public FaqItem(String userid, String title, String content){
         this.userid = userid;
         this.title = title;
         this.content=content;
-        this.answer = answer;
     }
 
     public String getTitle() {
@@ -38,11 +36,4 @@ public class FaqItem {
         this.content = content;
     }
 
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
 }

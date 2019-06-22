@@ -1,13 +1,17 @@
 package danbee.com;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,12 +23,15 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import danbee.com.historydata.HistoryResult;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class UserHistoryActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     HistoryRecyclerViewAdapter adapter;
     ArrayList<HistoryItem> items;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +43,7 @@ public class UserHistoryActivity extends AppCompatActivity {
         if(AppHelper.requestQueue == null)
             AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        progressBar = findViewById(R.id.history_progressBar);
         sendRequest(); //통신
 
         recyclerView = findViewById(R.id.history_recycler_view);
@@ -48,6 +56,7 @@ public class UserHistoryActivity extends AppCompatActivity {
     }
 
     void sendRequest(){
+        progressBar.setVisibility(View.VISIBLE);
         items.clear();
         String url = "http://3.17.25.223/api/history/user/"+UserInfo.info.getUserid();
         StringRequest request = new StringRequest(
@@ -88,9 +97,46 @@ public class UserHistoryActivity extends AppCompatActivity {
                 int kickid = historyResult.data.get(i).kickid;
                 items.add(new HistoryItem(sDate,eDate,kickid));
             }
-
+            progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
         }
+
+        if(historyResult.result == 404) {
+            final PrettyDialog prettyDialog = new PrettyDialog(this);
+            prettyDialog
+                    .setTitle("알림")
+                    .setMessage("이용내역이 없습니다.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    Intent intent = new Intent(UserHistoryActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    prettyDialog.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(UserHistoryActivity.this);
+            adbuilder.setTitle("알림")
+                    .setMessage("이용내역이 없습니다.")
+                    .setCancelable(false)
+                    .setIcon(R.drawable.danbeelogoj)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(UserHistoryActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();*/
+        }
+
     }
 
 }

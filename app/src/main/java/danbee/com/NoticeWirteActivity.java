@@ -19,6 +19,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
+
 public class NoticeWirteActivity extends AppCompatActivity {
 
     Activity activity = this;
@@ -28,6 +31,7 @@ public class NoticeWirteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_wirte);
 
+        view = findViewById(R.id.noticewrite_progress_view);
         Button bt_ok = findViewById(R.id.noticewrite_bt_ok);
         Button bt_cancel = findViewById(R.id.noticewrite_bt_cancel);
 
@@ -42,10 +46,9 @@ public class NoticeWirteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //진행중 표시 레이아웃
-                view = findViewById(R.id.noticewrite_progress_view);
+
                 view.setVisibility(View.VISIBLE);
                 view.setClickable(false);
-                ProgressBar progressBar = view.findViewById(R.id.noticewrite_progressBar);
 
                 //통신
                 writeNoticeSendRequest();
@@ -73,11 +76,29 @@ public class NoticeWirteActivity extends AppCompatActivity {
         String content = et_content.getText().toString();
 
         if(title.equals("") || content.equals("")){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final PrettyDialog prettyDialog = new PrettyDialog(activity);
+            prettyDialog
+                    .setTitle("알림")
+                    .setMessage("제목과 내용을 작성해주세요.")
+                    .setIcon(R.drawable.danbeelogoj)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog.dismiss();
+                                }
+                            }
+                    )
+                    .show();
+
+            /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("제목과 내용을 작성해주세요.")
                     .setPositiveButton("확인",null)
                     .setCancelable(false)
-                    .show();
+                    .show();*/
 
             view.setVisibility(View.GONE);
             return;
@@ -91,7 +112,28 @@ public class NoticeWirteActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        new PrettyDialog(activity)
+                                .setTitle("알림")
+                                .setMessage("작성이 완료되었습니다.")
+                                .setIcon(R.drawable.danbeelogoj)
+                                .addButton(
+                                        "확인",					// button text
+                                        R.color.pdlg_color_black,		// button text color
+                                        R.color.pdlg_color_yellow,		// button background color
+                                        new PrettyDialogCallback() {		// button OnClick listener
+                                            @Override
+                                            public void onClick() {
+                                                view.setVisibility(View.GONE);
+                                                Intent intent = new Intent();
+                                                setResult(RESULT_OK, intent);
+                                                finish();
+                                            }
+                                        }
+                                )
+                                .show();
+
+
+                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                         builder.setTitle("작성 완료")
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
@@ -103,15 +145,34 @@ public class NoticeWirteActivity extends AppCompatActivity {
                                     }
                                 })
                                 .setCancelable(false)
-                                .show();
+                                .show();*/
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("test", "write notice err: "+error);
+                        new PrettyDialog(activity)
+                                .setTitle("알림")
+                                .setMessage("전송이 실패되었습니다.")
+                                .setIcon(R.drawable.danbeelogoj)
+                                .addButton(
+                                        "확인",					// button text
+                                        R.color.pdlg_color_black,		// button text color
+                                        R.color.pdlg_color_yellow,		// button background color
+                                        new PrettyDialogCallback() {		// button OnClick listener
+                                            @Override
+                                            public void onClick() {
+                                                view.setVisibility(View.GONE);
+                                                setResult(RESULT_CANCELED);
+                                                finish();
+                                            }
+                                        }
+                                )
+                                .show();
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                         builder.setTitle("전송 실패")
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                     @Override
@@ -122,7 +183,7 @@ public class NoticeWirteActivity extends AppCompatActivity {
                                     }
                                 })
                                 .setCancelable(false)
-                                .show();
+                                .show();*/
                     }
                 }
         );

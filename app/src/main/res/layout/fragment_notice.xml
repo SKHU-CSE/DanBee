@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NoticeQuestionActivity">
+
+    <ProgressBar
+        android:id="@+id/notice_fragment_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="gone"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,9 +38,11 @@
             android:id="@+id/notice_detail_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="클릭시 창이 닫힙니다."
+            android:text="화면 클릭시 창이 닫힙니다."
             android:layout_centerHorizontal="true"
-            android:textColor="#cccccc"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#856400"
             />
         <RelativeLayout
             android:layout_width="match_parent"
@@ -82,6 +93,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="작성하기"
+        android:visibility="gone"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"

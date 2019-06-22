@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:el_duration="1000"
-        app:el_expanded="true"
+        app:el_expanded="false"
         app:el_parallax="0.5"
         >
         <RelativeLayout
@@ -70,29 +70,10 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="content"
-                android:textColor="#000000"
+                android:textColor="#776618"
                 android:layout_below="@id/question_item_expand_tv_userid"
                 />
 
-            <TextView
-                android:id="@+id/question_item_expand_tv_a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:layout_below="@id/question_item_expand_tv_content"
-                android:text="A."
-                android:textStyle="bold"
-                android:textColor="#776618"/>
-            <TextView
-                android:id="@+id/question_item_expand_tv_answer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="contentfsfsefseffsef\nwewe\wewrwer\nwrwerewr\newrwerew\nrwerwe\"
-                android:textStyle="bold"
-                android:textColor="#776618"
-                android:layout_toRightOf="@id/question_item_expand_tv_a"
-                android:layout_below="@id/question_item_expand_tv_content"/>
         </RelativeLayout>
     </net.cachapa.expandablelayout.ExpandableLayout>
 

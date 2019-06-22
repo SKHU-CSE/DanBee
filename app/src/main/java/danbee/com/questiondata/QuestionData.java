@@ -1,9 +1,9 @@
 package danbee.com.questiondata;
 
 public class QuestionData {
+    public String id;
     public String userid;
+    public String time;
     public String title;
-    public int question_id;
-    public String question_content;
-    public String answer_content;
+    public String content;
 }

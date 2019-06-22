@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class MypageActivity extends AppCompatActivity {
 
@@ -41,9 +45,9 @@ public class MypageActivity extends AppCompatActivity {
         TextView id = (TextView) findViewById(R.id.mypageitem_tv_id);
         TextView birth = (TextView) findViewById(R.id.mypageitem_tv_birth);
         TextView phone = (TextView) findViewById(R.id.mypageitem_tv_phone);
-        TextView changepassword = (TextView) findViewById(R.id.mypageitem_tv_changepassword);
+        ImageView im_changepassword = (ImageView) findViewById(R.id.mypageitem_iv_changepassword);
         TextView deleteaccount = (TextView) findViewById(R.id.mypageitem_tv_deleteaccount);
-
+        CardView card_changepw = findViewById(R.id.mypageitem_cardView_pwchange);
 
         name.setText(UserInfo.info.getName());
         id.setText(UserInfo.info.getUserid());
@@ -51,9 +55,18 @@ public class MypageActivity extends AppCompatActivity {
         phone.setText(UserInfo.info.getPhone());
 
 
-        changepassword.setOnClickListener(new View.OnClickListener() {
+        im_changepassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 비밀번호 변경하기 화면으로 넘김
+                Intent intent = new Intent(MypageActivity.this, ChangePwActivity.class);
+                intent.putExtra("id", UserInfo.info.getUserid());
+                startActivity(intent);
+            }
+        });
+
+        card_changepw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(MypageActivity.this, ChangePwActivity.class);
                 intent.putExtra("id", UserInfo.info.getUserid());
                 startActivity(intent);
@@ -63,59 +76,51 @@ public class MypageActivity extends AppCompatActivity {
         deleteaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // 탈퇴하기 다이알로그 뜨고 확인하면 탈퇴완료 or 취소하면 뒤돌아가기
-                AlertDialog.Builder adbuilder = new AlertDialog.Builder(MypageActivity.this);
-                adbuilder.setTitle("알림")
+                final PrettyDialog prettyDialog = new PrettyDialog(MypageActivity.this);
+                prettyDialog
+                        .setTitle("알림")
                         .setMessage("정말 탈퇴하시겠습니까?")
-                        .setCancelable(false)
                         .setIcon(R.drawable.danbeelogoj)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                userid = UserInfo.info.getUserid();
-
-                                //내부디비수정
-                                AutoLoginDbHelper.openDatabase(MypageActivity.this, "auto");
-                                AutoLoginDbHelper.deleteLog();
-                                AutoLoginDbHelper.createAutoTable();
-                                AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
-
-                                deleteRequest();
-                                // 회원탈퇴 처리
-                                UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
+                        .addButton(
+                                "확인",					// button text
+                                R.color.pdlg_color_black,		// button text color
+                                R.color.pdlg_color_yellow,		// button background color
+                                new PrettyDialogCallback() {		// button OnClick listener
                                     @Override
-                                    public void onFailure(ErrorResult errorResult) {
-                                        int result = errorResult.getErrorCode();
+                                    public void onClick() {
+                                        userid = UserInfo.info.getUserid();
+                                        UserInfo.info.setLoginState(false);
+                                        UserInfo.info.setUserid("");
+                                        UserInfo.info.setPhone("");
+                                        UserInfo.info.setName("");
+                                        UserInfo.info.setGender(-1);
+                                        UserInfo.info.setBirth("");
 
-                                        if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
-                                            Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                                        }
+                                        //내부디비수정
+                                        AutoLoginDbHelper.openDatabase(MypageActivity.this, "auto");
+                                        AutoLoginDbHelper.deleteLog();
+                                        AutoLoginDbHelper.createAutoTable();
+                                        AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
+
+                                        deleteRequest();
+
+                                        prettyDialog.dismiss();
                                     }
-
+                                }
+                        )
+                        .addButton(
+                                "취소",
+                                R.color.pdlg_color_black,		// button text color
+                                R.color.pdlg_color_yellow,
+                                new PrettyDialogCallback() {
                                     @Override
-                                    public void onSessionClosed(ErrorResult errorResult) {
-                                        Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
+                                    public void onClick() {
+                                        prettyDialog.dismiss();
                                     }
-
-                                    @Override
-                                    public void onNotSignedUp() {
-                                        Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onSuccess(Long result) { }
-                                });
-
-                            }
-                        })
-                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 다이알로그만 없어지게하기(그냥냅두면 될듯), finish는 액티비티가 종료라 메인화면으로 나가짐
-                            }
-                        })
+                                }
+                        )
                         .show();
+
             }
         });
     }
@@ -166,10 +171,6 @@ public class MypageActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "회원탈퇴 도중 오류가 발생하였습니다..", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-
 
 }
 

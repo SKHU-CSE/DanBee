@@ -53,6 +53,7 @@ import com.nightonke.boommenu.BoomMenuButton;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -60,11 +61,16 @@ import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
 import danbee.com.kickdata.BatteryResult;
 import danbee.com.kickdata.BorrowResult;
+import danbee.com.kickgpsdata.GpsData;
+import danbee.com.kickgpsdata.GpsResult;
 import danbee.com.logindata.UserStateResult;
 import danbee.com.service.ShowNotificationService;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     Marker marker;
+    ArrayList<Marker> markers = new ArrayList<Marker>();
     NaverMap mnaverMap;
     LatLng mCurPos;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -115,14 +121,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
 
-        //현위치 다시찾기
+        //새로고침버튼 현위치 다시찾기
         findViewById(R.id.main_gps_imageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mCurPos != null){
                     mnaverMap.setCameraPosition(new CameraPosition(mCurPos, 17));
                 }
-
+                kickGpsRequest();
                 //킥보드 배터리 양체크 통신
                 if(UserInfo.info.getKickid() != -1){
                     batteryRequest(UserInfo.info.getKickid());
@@ -139,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 lendRequest(UserInfo.info.getUserid());
             }
         });
+
     }
 
     @Override
@@ -151,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //킥보드 배터리 양체크 통신
         if(UserInfo.info.getKickid() != -1){
             batteryCard.setVisibility(View.VISIBLE);
-            checkUserState(UserInfo.info.getUserid());
+            checkUserStateRequest(UserInfo.info.getUserid());
            // stopService();
             startService();
 
@@ -179,9 +186,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mnaverMap = naverMap;
         naverMap.setLocationSource(locationSource); //현위치
         naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
-
+        kickGpsRequest();
         // 위치(위도,경도) 객체
-        LatLng maker_location = new LatLng(37.487936, 126.825071);
+       // LatLng maker_location = new LatLng(37.487936, 126.825071);
 
         //위치변경시 콜백
         naverMap.addOnLocationChangeListener(new NaverMap.OnLocationChangeListener() {
@@ -203,33 +210,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-        marker = new Marker(); //마커 생성
-        marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
-        marker.setWidth(150);
-        marker.setHeight(150);
-        marker.setPosition(maker_location); //마커 위치설정
-        marker.setMap(naverMap); //마커 표시 (보여짐)
-
-
-        //마커누를때 뜨는정보창
-        final InfoWindow infoWindow = new InfoWindow();
-        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
-            @NonNull
-            @Override
-            public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                return "정보 창 내용";
-            }
-        });
-
-
-        marker.setOnClickListener(new Overlay.OnClickListener() {   //지도에서 마커 클릭했을때 이벤트
-            @Override
-            public boolean onClick(@NonNull Overlay overlay) {
-                infoWindow.open(marker); //정보창 내용과 마커 연결
-                return false;
-            }
-        });
-
+//        marker = new Marker(); //마커 생성
+//        marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
+//        marker.setWidth(150);
+//        marker.setHeight(150);
+//        marker.setPosition(maker_location); //마커 위치설정
+//        marker.setMap(naverMap); //마커 표시 (보여짐)
 
 //
 //        // 카메라 위치와 줌 조절(숫자가 클수록 확대)
@@ -355,15 +341,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     loginCheckMessage();
                     return;
                 }
-                //qr코드 스캐너
-                new IntentIntegrator(this)
-                        .setPrompt("QR코드를 찍어주세요")
-                        .setOrientationLocked(true)
-                        .initiateScan();
+                if (UserInfo.info.getKickid() != -1) {
+                    final PrettyDialog prettyDialog = new PrettyDialog(this);
+                    prettyDialog
+                            .setTitle("알림")
+                            .setMessage("이미 킥보드를 사용중입니다.")
+                            .setIcon(R.drawable.danbeelogoj)
+                            .addButton(
+                                    "확인",					// button text
+                                    R.color.pdlg_color_black,		// button text color
+                                    R.color.pdlg_color_yellow,		// button background color
+                                    new PrettyDialogCallback() {        // button OnClick listener
+                                        @Override
+                                        public void onClick() {
+                                            prettyDialog.dismiss();
+                                        }
+                                    }
+                            )
+                            .show();
+                }else {
+                    //qr코드 스캐너
+                    new IntentIntegrator(this)
+                            .setPrompt("QR코드를 찍어주세요")
+                            .setOrientationLocked(true)
+                            .initiateScan();
+                }
                 break;
             case 1:
                 if (UserInfo.info.isLoginState()) { //로그아웃클릭
-
                     UserInfo.info.setLoginState(false);
                     UserInfo.info.setUserid("");
                     UserInfo.info.setPhone("");
@@ -378,11 +383,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     AutoLoginDbHelper.createAutoTable();
                     AutoLoginDbHelper.insertData(0, "", "", "", 10, "");
 
-                    AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
+                    final PrettyDialog prettyDialog1 = new PrettyDialog(this);
+                            prettyDialog1
+                            .setTitle("알림")
+                            .setMessage("로그아웃 되었습니다.")
+                            .setIcon(R.drawable.danbeelogoj)
+                            .addButton(
+                                    "확인",					// button text
+                                    R.color.pdlg_color_black,		// button text color
+                                    R.color.pdlg_color_yellow,		// button background color
+                                    new PrettyDialogCallback() {        // button OnClick listener
+                                        @Override
+                                        public void onClick() {
+                                            prettyDialog1.dismiss();
+                                        }
+                                    }
+                            )
+                            .show();
+
+                    /*AlertDialog.Builder adbuilder = new AlertDialog.Builder(this);
                     adbuilder.setTitle("로그아웃 되었습니다.")
                             .setPositiveButton("확인", null)
                             .setCancelable(false)
-                            .show();
+                            .show();*/
+
                     stopService();
                     batteryCard.setVisibility(View.GONE);
                     loginButtonChange();
@@ -407,7 +431,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
                 break;
             case 3:
-
+                intent = new Intent(this, DanbeeActivity.class);
+                startActivity(intent);
                 break;
             case 4:
                 intent = new Intent(this, NoticeQuestionActivity.class);
@@ -456,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (requestCode == 100){
             if(resultCode == RESULT_CANCELED){
                 if(UserInfo.info != null || !UserInfo.info.getUserid().equals("")) {
-                    checkUserState(UserInfo.info.getUserid());  //껏다키는경우 빌린상태 체크
+                    checkUserStateRequest(UserInfo.info.getUserid());  //껏다키는경우 빌린상태 체크
 
                 }
             }
@@ -537,18 +562,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             startService(); //빌리기시작하면 배터리용량알려줌
         }else if(qrResult.result == 804){
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("이미 대여중인 킥보드입니다.")
-                    .setCancelable(false)
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("이미 대여중인 킥보드입니다.")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }else {
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("알 수 없는 오류가 발생했습니다. 다시 시도해주세요")
-                    .setCancelable(false)
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("알 수 없는 오류가 발생했습니다. 다시 시도해주세요")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }
     }
@@ -609,19 +656,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //로그인 안했을시 나타나는 다이얼로그
     public void loginCheckMessage() {
-        AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-        adbuilder.setTitle("알림")
-                .setMessage("로그인을 하시오.")
-                .setCancelable(false)
+        final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+        prettyDialog2
+                .setTitle("알림")
+                .setMessage("로그인을 먼저 해주세요.")
                 .setIcon(R.drawable.danbeelogoj)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MainActivity.this , LoginActivity.class);
-                        startActivity(intent);
-                    }
-                })
+                .addButton(
+                        "확인",					// button text
+                        R.color.pdlg_color_black,		// button text color
+                        R.color.pdlg_color_yellow,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
+                                Intent intent = new Intent(MainActivity.this , LoginActivity.class);
+                                startActivity(intent);
+                                prettyDialog2.dismiss();
+                            }
+                        }
+                )
                 .show();
+
     }
 
 
@@ -701,24 +755,47 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             UserInfo.info.setKickid(-1);
             batteryCard.setVisibility(View.GONE);
             stopService();
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("성공적으로 반납되었습니다.")
-                    .setCancelable(false)
+
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("성공적으로 반납되었습니다.")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }else{
-            AlertDialog.Builder adbuilder = new AlertDialog.Builder(MainActivity.this);
-            adbuilder.setMessage("정상적으로 반납되지 않았습니다. 다시 시도해주세요")
-                    .setCancelable(false)
+            final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
+            prettyDialog2
+                    .setTitle("알림")
+                    .setMessage("반납도중 오류가 발생하였습니다. 다시 시도해주세요")
                     .setIcon(R.drawable.danbeelogoj)
-                    .setPositiveButton("확인", null)
+                    .addButton(
+                            "확인",					// button text
+                            R.color.pdlg_color_black,		// button text color
+                            R.color.pdlg_color_yellow,		// button background color
+                            new PrettyDialogCallback() {		// button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    prettyDialog2.dismiss();
+                                }
+                            }
+                    )
                     .show();
         }
     }
 
     //껏다키는경우 다시체크
-    public void checkUserState(String userid) {
+    public void checkUserStateRequest(String userid) {
         String url = "http://3.17.25.223/api/user/state/"+userid;
         Log.d("test", "checkuser: "+url);
         StringRequest request = new StringRequest(
@@ -775,5 +852,81 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     }
+
+    //껏다키는경우 다시체크
+    public void kickGpsRequest() {
+        String url = "http://3.17.25.223/api/kick/gps/get";
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() { //응답 받음
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("test", "kickgps: "+response);
+                        kickGpsProcessResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("test", "kickgps: "+error);
+                    }
+                }
+        );
+        //자동캐싱잇는경우 이전결과 그대로보여짐
+        request.setShouldCache(false);  //새로요청해서 결과보여줌
+        AppHelper.requestQueue.add(request);
+    }
+
+    //json 파싱
+    public void kickGpsProcessResponse(String response){
+
+
+
+        Gson gson = new Gson();
+        GpsResult gpsResult = gson.fromJson(response, GpsResult.class);
+        if(gpsResult.result == 777){
+
+            //마커삭제
+            for (Marker mark : markers){
+                mark.setMap(null);
+            }
+            markers.clear();
+
+            for( GpsData object : gpsResult.data){
+                marker = new Marker();
+                marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
+                marker.setWidth(150);
+                marker.setHeight(150);
+
+                LatLng maker_location = new LatLng(Double.parseDouble(object.lat), Double.parseDouble(object.lng));
+                marker.setPosition(maker_location); //마커 위치설정
+                marker.setMap(this.mnaverMap); //마커 표시 (보여짐)
+
+                //마커누를때 뜨는정보창
+                final InfoWindow infoWindow = new InfoWindow();
+                infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
+                    @NonNull
+                    @Override
+                    public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                        return "정보 창 내용";
+                    }
+                });
+
+                marker.setOnClickListener(new Overlay.OnClickListener() {   //지도에서 마커 클릭했을때 이벤트
+                    @Override
+                    public boolean onClick(@NonNull Overlay overlay) {
+                        infoWindow.open(marker); //정보창 내용과 마커 연결
+                        return false;
+                    }
+                });
+
+                markers.add(marker);
+            }
+
+
+        }
+    }
+
 
 }

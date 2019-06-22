@@ -17,7 +17,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.9"
             android:background="#ffffff"
             android:padding="16dp">
             <TextView
@@ -32,14 +31,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@+id/notice_img"
                 />
-<!--
-            <TextView
-                android:id="@+id/notice_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="memo"
-                android:layout_below="@id/notice_title"/>
--->
+
             <TextView
                 android:id="@+id/notice_date"
                 android:layout_width="wrap_content"
