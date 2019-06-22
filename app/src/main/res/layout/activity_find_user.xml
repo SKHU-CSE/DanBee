@@ -17,7 +17,14 @@
         app:radius="12dp"
         app:segments="@array/find_segment_string"
         app:textSize="18dp"
-        app:textVerticalPadding="6dp" />
+        app:textVerticalPadding="6dp"
+        app:selectedBackgroundColor="#f7d649"
+        app:unSelectedBackgroundColor="#ffffff"
+        app:selectedTextColor="#ffffff"
+        app:unSelectedTextColor="#000000"
+        app:selectedStrokeColor="#f7d649"
+        app:unSelectedStrokeColor="#f7d649"
+        app:focusedBackgroundColor="#F9E695"/>
 
     <FrameLayout
         android:id="@+id/fl_finduser"

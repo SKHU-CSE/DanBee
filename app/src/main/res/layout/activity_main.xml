@@ -57,12 +57,12 @@
     </android.support.v7.widget.CardView>
     <ImageButton
         android:id="@+id/main_gps_imageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:padding="5dp"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="150dp"
-        android:layout_marginRight="55dp"
+        android:layout_marginRight="50dp"
         android:src="@drawable/refresh"
         android:scaleType="fitXY"
         android:background="@drawable/ripple"

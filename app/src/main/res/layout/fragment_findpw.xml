@@ -65,10 +65,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/findpw_user_et_phone"
-        android:layout_marginTop="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="33dp"
+        android:background="@drawable/bt_click_yellow"
         android:text="비밀번호 찾기"
-        android:textSize="18sp"
         android:textColor="#000000"
-        android:background="@drawable/bt_click_orange"/>
+        android:textSize="18sp" />
 
 </RelativeLayout>

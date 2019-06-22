@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //자동로그인확인
         autoLogin();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar); //만든툴바 액션바로 설정
 
         boomMenuSet();
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -350,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .addButton(
                                     "확인",					// button text
                                     R.color.pdlg_color_black,		// button text color
-                                    R.color.pdlg_color_yellow,		// button background color
+                                    R.color.danbeeBomButton1,		// button background color
                                     new PrettyDialogCallback() {        // button OnClick listener
                                         @Override
                                         public void onClick() {
@@ -391,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .addButton(
                                     "확인",					// button text
                                     R.color.pdlg_color_black,		// button text color
-                                    R.color.pdlg_color_yellow,		// button background color
+                                    R.color.danbeeBomButton1,		// button background color
                                     new PrettyDialogCallback() {        // button OnClick listener
                                         @Override
                                         public void onClick() {
@@ -464,10 +462,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case 4:
             case 5:
             case 6:
-                return R.color.danbeeBomButton7;
+                return R.color.danbeeBomButton1;
 
             case 3:
-                return R.color.danbeeBomButton8;
+                return R.color.danbeeBomButton2;
 
             default:
                 return R.color.colorPrimaryDark;
@@ -570,7 +568,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addButton(
                             "확인",					// button text
                             R.color.pdlg_color_black,		// button text color
-                            R.color.pdlg_color_yellow,		// button background color
+                            R.color.danbeeBomButton1,		// button background color
                             new PrettyDialogCallback() {		// button OnClick listener
                                 @Override
                                 public void onClick() {
@@ -588,7 +586,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addButton(
                             "확인",					// button text
                             R.color.pdlg_color_black,		// button text color
-                            R.color.pdlg_color_yellow,		// button background color
+                            R.color.danbeeBomButton1,		// button background color
                             new PrettyDialogCallback() {		// button OnClick listener
                                 @Override
                                 public void onClick() {
@@ -664,7 +662,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addButton(
                         "확인",					// button text
                         R.color.pdlg_color_black,		// button text color
-                        R.color.pdlg_color_yellow,		// button background color
+                        R.color.danbeeBomButton1,		// button background color
                         new PrettyDialogCallback() {		// button OnClick listener
                             @Override
                             public void onClick() {
@@ -764,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addButton(
                             "확인",					// button text
                             R.color.pdlg_color_black,		// button text color
-                            R.color.pdlg_color_yellow,		// button background color
+                            R.color.danbeeBomButton1,		// button background color
                             new PrettyDialogCallback() {		// button OnClick listener
                                 @Override
                                 public void onClick() {
@@ -782,7 +780,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addButton(
                             "확인",					// button text
                             R.color.pdlg_color_black,		// button text color
-                            R.color.pdlg_color_yellow,		// button background color
+                            R.color.danbeeBomButton1,		// button background color
                             new PrettyDialogCallback() {		// button OnClick listener
                                 @Override
                                 public void onClick() {

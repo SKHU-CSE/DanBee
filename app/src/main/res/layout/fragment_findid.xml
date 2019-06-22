@@ -38,6 +38,6 @@
         android:text="아이디 찾기"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:background="@drawable/bt_click_orange"/>
+        android:background="@drawable/bt_click_yellow"/>
 
 </RelativeLayout>

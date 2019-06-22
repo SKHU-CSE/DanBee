@@ -100,7 +100,7 @@ public class ChangePwActivity extends AppCompatActivity {
                     .addButton(
                             "확인",                    // button text
                             R.color.pdlg_color_black,        // button text color
-                            R.color.pdlg_color_yellow,        // button background color
+                            R.color.danbeeBomButton1,        // button background color
                             new PrettyDialogCallback() {        // button OnClick listener
                                 @Override
                                 public void onClick() {
@@ -124,7 +124,7 @@ public class ChangePwActivity extends AppCompatActivity {
                     .addButton(
                             "확인",                    // button text
                             R.color.pdlg_color_black,        // button text color
-                            R.color.pdlg_color_yellow,        // button background color
+                            R.color.danbeeBomButton1,        // button background color
                             new PrettyDialogCallback() {        // button OnClick listener
                                 @Override
                                 public void onClick() {
