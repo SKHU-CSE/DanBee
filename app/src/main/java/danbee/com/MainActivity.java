@@ -433,17 +433,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //버튼색 지정
     int btColorSet(int index){
         switch (index){
-
-            case 6:
+            case 0:
             case 1:
             case 2:
-            case 0:
-            case 5:
             case 4:
+            case 5:
+            case 6:
                 return R.color.danbeeBomButton7;
 
             case 3:
                 return R.color.danbeeBomButton8;
+
             default:
                 return R.color.colorPrimaryDark;
         }
