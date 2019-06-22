@@ -206,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
             UserInfo.info.setLoginState(true);
 
             Toast toast = Toast.makeText(this, "반갑습니다. " + userid + " 님", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 200);
             toast.show();
 
             AutoLoginDbHelper.openDatabase(activity, "auto");
