@@ -12,29 +12,29 @@
 
     <android.support.v7.widget.CardView
         android:visibility="visible"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
         android:id="@+id/main_battery_cardview"
         android:layout_width="250dp"
         app:cardBackgroundColor="#ccffffff"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="6dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="15dp">
+            android:padding="20dp">
             <TextView
                 android:id="@+id/main_battery_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textAlignment="center"
+                android:layout_marginBottom="5dp"
                 android:text="배터리: 0%"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
+
             <TextView
                 android:id="@+id/main_time_text"
                 android:layout_width="wrap_content"
@@ -42,8 +42,8 @@
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:text="시작 시간: 0시간 0분"
-                android:textSize="18dp"/>
 
+                android:textSize="18dp"/>
             <Button
                 android:id="@+id/main_lend_button"
                 android:layout_width="120dp"

@@ -10,6 +10,7 @@ public class UserInfo {
     private String birth;
     private int kickid = -1;
 
+
     public int getKickid() {
         return kickid;
     }
