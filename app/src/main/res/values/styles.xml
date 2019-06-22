@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/iosTint</item>
+        <item name="android:fontFamily">@font/kakaoregular</item>
 
     </style>
     
