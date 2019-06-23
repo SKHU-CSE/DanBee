@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,6 +32,9 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.exception.KakaoException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
@@ -106,8 +110,8 @@ public class LoginActivity extends AppCompatActivity {
 
         EditText et_id = findViewById(R.id.InputId);
         EditText et_pw = findViewById(R.id.InputPW);
-        String id = et_id.getText().toString();
-        String pw = et_pw.getText().toString();
+        final String id = et_id.getText().toString();
+        final String pw = et_pw.getText().toString();
 
         //AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final PrettyDialog prettyDialog = new PrettyDialog(this);
@@ -136,10 +140,10 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        String url = "http://3.17.25.223/api/user/login/" + id + "/" + pw;
-
+        //String url = "http://3.17.25.223/api/user/login/" + id + "/" + pw;
+        String url = "http://3.17.25.223/api/user/login";
         StringRequest request = new StringRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 url,
                 new Response.Listener<String>() { //응답 받음
                     @Override
@@ -154,7 +158,16 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("test", "login: " + error);
                     }
                 }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userid", id);
+                params.put("pw", pw);
+
+                return params;
+            }
+        };
         //자동캐싱잇는경우 이전결과 그대로보여짐
         request.setShouldCache(false);  //새로요청해서 결과보여줌
         AppHelper.requestQueue.add(request);
