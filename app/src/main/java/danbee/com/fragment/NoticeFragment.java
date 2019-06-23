@@ -219,10 +219,6 @@ public class NoticeFragment extends Fragment {
             }
             progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
-        }else if(noticeResult.result == 404){
-            /*에러
-
-             */
         }
     }
 

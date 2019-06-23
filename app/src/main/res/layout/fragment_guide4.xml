@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp"
     >
 
     <android.support.v7.widget.CardView
@@ -20,7 +22,7 @@
             android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="150dp"
-            android:src="@drawable/map"
+            android:src="@drawable/helmet"
             />
 
         <TextView
@@ -30,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="100dp"
             android:layout_below="@+id/guide1_iv_map"
-            android:text="단비에서 킥보드 찾기"
+            android:text="안전하게 단비 즐기기"
             android:textSize="18sp"
             android:textColor="#000000"
             android:textStyle="bold"

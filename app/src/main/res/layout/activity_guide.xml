@@ -23,8 +23,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="80dp"
+        app:piv_selectedColor="@color/danbeeBomButton2"
+        app:piv_unselectedColor="#f1f2f6"
         app:piv_animationType="swap"
+        app:piv_interactiveAnimation="true"
         />
 
 </RelativeLayout>
