@@ -9,7 +9,19 @@ public class UserInfo {
     private int gender;
     private String birth;
     private int kickid = -1;
+    private String userStartTime;
 
+    public static UserInfo getInfo() {
+        return info;
+    }
+
+    public String getUserStartTime() {
+        return userStartTime;
+    }
+
+    public void setUserStartTime(String userStartTime) {
+        this.userStartTime = userStartTime;
+    }
 
     public int getKickid() {
         return kickid;

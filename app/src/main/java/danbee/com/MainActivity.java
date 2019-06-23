@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView startTimeText;
     Button bt_kickLend;
 
-    String userStartTime;
     Timer timer;// 사용상태 새로고침
     @Override
     protected void onDestroy() {
@@ -190,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         try {
-                            Date startTime = format1.parse(userStartTime);
+                            Date startTime = format1.parse(UserInfo.info.getUserStartTime());
                             String cur = format1.format(new Date());
                             Date curTime = format1.parse(cur);
                             long useTime = ((curTime.getTime() - startTime.getTime()) / 1000);  //사용시간 (초)
@@ -609,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             battery = qrResult.battery;
             batteryText.setText("남은 배터리: "+qrResult.battery+"%");
 
-            userStartTime = qrResult.time;
+            UserInfo.info.setUserStartTime(qrResult.time);
 
             if(timer == null) {
                 timer = new Timer();
@@ -811,6 +810,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             batteryCard.setVisibility(View.GONE);
             stopService();
 
+            if(timer != null) {
+                timer.cancel();
+            }
             final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
             prettyDialog2
                     .setTitle("알림")
@@ -824,9 +826,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 @Override
                                 public void onClick() {
                                     prettyDialog2.dismiss();
-                                    if(timer != null) {
-                                        timer.cancel();
-                                    }
+
                                 }
                             }
                     )
@@ -888,9 +888,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(userStateResult.kickid != -1){
 
                 UserInfo.info.setKickid(userStateResult.kickid);
+                UserInfo.info.setUserStartTime(userStateResult.time);  //시작시간저장
                 batteryCard.setVisibility(View.VISIBLE);
 
-                userStartTime = userStateResult.time;  //시작시간저장
+
                 if(timer == null) {
                     timer = new Timer();
                     timer.schedule(borrowTime, 0, 10000);
