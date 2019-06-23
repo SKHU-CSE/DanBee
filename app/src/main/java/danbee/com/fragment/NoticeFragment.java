@@ -67,7 +67,6 @@ public class NoticeFragment extends Fragment {
 
         set(rootView);
         progressBar = rootView.findViewById(R.id.notice_fragment_progressBar);
-        sendRequest(); //통신
 
         recyclerView = rootView.findViewById(R.id.notice_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -125,7 +124,8 @@ public class NoticeFragment extends Fragment {
                 startActivityForResult(intent, WirteSuccessCode);
             }
         });
-
+        //공지사항최신화
+        sendRequest();
         return rootView;
     }
 
@@ -174,13 +174,6 @@ public class NoticeFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //공지사항최신화
-        sendRequest();
-    }
-
     //서버 통신
     void sendRequest(){
         progressBar.setVisibility(View.VISIBLE);
@@ -226,6 +219,10 @@ public class NoticeFragment extends Fragment {
             }
             progressBar.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
+        }else if(noticeResult.result == 404){
+            /*에러
+
+             */
         }
     }
 

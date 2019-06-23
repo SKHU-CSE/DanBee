@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.rd.PageIndicatorView;
+
 import java.util.ArrayList;
 
 import danbee.com.fragment.GuideFragment1;
@@ -19,6 +21,7 @@ import danbee.com.fragment.GuideFragment5;
 
 public class GuideActivity extends AppCompatActivity {
 
+    PageIndicatorView pageIndicatorView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,20 @@ public class GuideActivity extends AppCompatActivity {
         adapter.addItem(guideFragment3);
         adapter.addItem(guideFragment4);
         adapter.addItem(guideFragment5);
+
+        pageIndicatorView = findViewById(R.id.guide_pageIndicatorView);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {/*empty*/}
+
+            @Override
+            public void onPageSelected(int position) {
+                pageIndicatorView.setSelection(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {/*empty*/}
+        });
 
         pager.setAdapter(adapter);
 
