@@ -114,7 +114,7 @@ public class NoticeFragment extends Fragment {
         //작성하기 버튼
         Button bt_write = rootView.findViewById(R.id.noticewrite_bt_write);
         if(UserInfo.info.getUserid() != null) { // 작성하기 버튼 보이기
-            if(UserInfo.info.getUserid().equals("hj") || UserInfo.info.getUserid().equals("namsoo" ) || UserInfo.info.getUserid().equals("jaehee") ) {
+            if(UserInfo.info.getUserid().equals("hj") || UserInfo.info.getUserid().equals("namsoo" ) || UserInfo.info.getUserid().equals("jh") ) {
                 bt_write.setVisibility(View.VISIBLE);
             }
         }
