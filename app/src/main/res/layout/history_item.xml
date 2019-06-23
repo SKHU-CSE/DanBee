@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_below="@id/history_tv_kickboard"
-        android:background="#FF9800" />
+        android:background="#f7d649" />
 
 
 </LinearLayout>
