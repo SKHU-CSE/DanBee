@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -51,6 +52,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import danbee.com.DbHelper.AutoLoginDbHelper;
 import danbee.com.deletedata.DeleteResult;
@@ -80,8 +83,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView startTimeText;
     Button bt_kickLend;
 
+    String userStartTime;
+    Timer timer;// 사용상태 새로고침
     @Override
     protected void onDestroy() {
+        if (timer != null) {
+            timer.cancel();
+        }
         super.onDestroy();
 
     }
@@ -134,12 +142,77 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bt_kickLend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final PrettyDialog prettyDialog = new PrettyDialog(MainActivity.this);
+                prettyDialog
+                        .setTitle("알림")
+                        .setMessage("정말 반납하시겠습니까?")
+                        .setIcon(R.drawable.danbeelogoj)
+                        .addButton(
+                                "OK",					// button text
+                                R.color.pdlg_color_red,		// button text color
+                                R.color.danbeeBomButton1,		// button background color
+                                new PrettyDialogCallback() {        // button OnClick listener
+                                    @Override
+                                    public void onClick() {
+                                        lendRequest(UserInfo.info.getUserid());
+                                        prettyDialog.dismiss();
+                                    }
+                                }
+                        )
+                        .addButton(
+                                "Cancel",
+                                R.color.pdlg_color_black,
+                                R.color.danbeeBomButton1,
+                                new PrettyDialogCallback() {        // button OnClick listener
+                                    @Override
+                                    public void onClick() {
+                                        prettyDialog.dismiss();
+                                    }
+                                }
+                        )
+                        .show();
 
-                lendRequest(UserInfo.info.getUserid());
             }
         });
 
+
     }
+
+    TimerTask borrowTime = new TimerTask() {
+        @Override
+        public void run() {
+            //ui변경가능 스레드
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //카드가 보여질때만 실행
+                    if (batteryCard.getVisibility() == View.VISIBLE) {
+
+                        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        try {
+                            Date startTime = format1.parse(userStartTime);
+                            String cur = format1.format(new Date());
+                            Date curTime = format1.parse(cur);
+                            long useTime = ((curTime.getTime() - startTime.getTime()) / 1000);  //사용시간 (초)
+                            Log.d("test", "curTime: "+useTime+"초");
+                            int useM = (int)useTime/60; //분
+                            if (useM > 60) {  //1시간 이상일시
+                                int useH = (int)useTime/3600;  //시간
+                                int useHM = (int)useTime%3600/60;  //분
+                                startTimeText.setText("사용 시간: " + useH + "시간" + useHM + "분");
+                            } else {
+                                startTimeText.setText("사용 시간: " + useM + "분");
+                            }
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -232,6 +305,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         boombt = findViewById(R.id.bmb);
 
+        //버튼 드래그 효과
+        boombt.setDraggable(true);
         for (int i = 0; i < boombt.getPiecePlaceEnum().pieceNumber(); i++) {
             if( i==3 ){
                 TextInsideCircleButton.Builder builder = new TextInsideCircleButton.Builder()
@@ -534,21 +609,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             battery = qrResult.battery;
             batteryText.setText("남은 배터리: "+qrResult.battery+"%");
 
-            String start = qrResult.time;
-            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                Date startTime = format1.parse(start);
-                Calendar c = Calendar.getInstance();
-                c.setTime(startTime);
+            userStartTime = qrResult.time;
 
-                int m = c.get(Calendar.MINUTE);
-                int h = c.get(Calendar.HOUR_OF_DAY);
-                startTimeText.setText("시작 시간: "+ h + "시" + m + "분");
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if(timer == null) {
+                timer = new Timer();
+                timer.schedule(borrowTime, 0, 10000);
             }
-
-
             startService(); //빌리기시작하면 배터리용량알려줌
         }else if(qrResult.result == 804){
             final PrettyDialog prettyDialog2 = new PrettyDialog(MainActivity.this);
@@ -758,6 +824,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 @Override
                                 public void onClick() {
                                     prettyDialog2.dismiss();
+                                    if(timer != null) {
+                                        timer.cancel();
+                                    }
                                 }
                             }
                     )
@@ -821,21 +890,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 UserInfo.info.setKickid(userStateResult.kickid);
                 batteryCard.setVisibility(View.VISIBLE);
 
-                String start = userStateResult.time;
-                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                try {
-                    Date startTime = format1.parse(start);
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(startTime);
-
-                    int m = c.get(Calendar.MINUTE);
-                    int h = c.get(Calendar.HOUR_OF_DAY);
-
-                    startTimeText.setText("시작 시간: "+ h + "시" + m + "분");
-                    batteryRequest(UserInfo.info.getKickid());
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                userStartTime = userStateResult.time;  //시작시간저장
+                if(timer == null) {
+                    timer = new Timer();
+                    timer.schedule(borrowTime, 0, 10000);
                 }
+                batteryRequest(UserInfo.info.getKickid());
             }
 
 
@@ -870,8 +930,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //json 파싱
     public void kickGpsProcessResponse(String response){
 
-
-
         Gson gson = new Gson();
         GpsResult gpsResult = gson.fromJson(response, GpsResult.class);
         if(gpsResult.result == 777){
@@ -882,11 +940,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             markers.clear();
 
-            for( GpsData object : gpsResult.data){
+            for( final GpsData object : gpsResult.data){
                 marker = new Marker();
                 marker.setIcon(OverlayImage.fromResource(R.drawable.danbeemarker)); //아이콘 변경
                 marker.setWidth(150);
                 marker.setHeight(150);
+                marker.setCaptionColor(Color.BLACK);
 
                 LatLng maker_location = new LatLng(Double.parseDouble(object.lat), Double.parseDouble(object.lng));
                 marker.setPosition(maker_location); //마커 위치설정
@@ -898,7 +957,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @NonNull
                     @Override
                     public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                        return "정보 창 내용";
+                        return object.battery+"%";
                     }
                 });
 
@@ -912,10 +971,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 markers.add(marker);
             }
-
-
         }
     }
-
 
 }

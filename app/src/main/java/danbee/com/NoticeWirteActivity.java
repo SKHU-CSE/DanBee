@@ -13,11 +13,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -72,8 +76,8 @@ public class NoticeWirteActivity extends AppCompatActivity {
 
         EditText et_title = findViewById(R.id.noticewrite_et_title);
         EditText et_content = findViewById(R.id.noticewrite_et_content);
-        String title = et_title.getText().toString();
-        String content = et_content.getText().toString();
+        final String title = et_title.getText().toString();
+        final String content = et_content.getText().toString();
 
         if(title.equals("") || content.equals("")){
             final PrettyDialog prettyDialog = new PrettyDialog(activity);
@@ -94,20 +98,14 @@ public class NoticeWirteActivity extends AppCompatActivity {
                     )
                     .show();
 
-            /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("제목과 내용을 작성해주세요.")
-                    .setPositiveButton("확인",null)
-                    .setCancelable(false)
-                    .show();*/
-
             view.setVisibility(View.GONE);
             return;
         }
 
-        String url = "http://3.17.25.223/api/notice/insert/"+title+"&"+content;
-
+       // String url = "http://3.17.25.223/api/notice/insert/"+title+"&"+content;
+        String url = "http://3.17.25.223/api/notice/insert";
         StringRequest request = new StringRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
@@ -132,20 +130,6 @@ public class NoticeWirteActivity extends AppCompatActivity {
                                 )
                                 .show();
 
-
-                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("작성 완료")
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        view.setVisibility(View.GONE);
-                                        Intent intent = new Intent();
-                                        setResult(RESULT_OK, intent);
-                                        finish();
-                                    }
-                                })
-                                .setCancelable(false)
-                                .show();*/
                     }
                 },
                 new Response.ErrorListener() {
@@ -171,22 +155,18 @@ public class NoticeWirteActivity extends AppCompatActivity {
                                 )
                                 .show();
 
-
-                        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("전송 실패")
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        view.setVisibility(View.GONE);
-                                        setResult(RESULT_CANCELED);
-                                        finish();
-                                    }
-                                })
-                                .setCancelable(false)
-                                .show();*/
                     }
                 }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("title", title);
+                params.put("content", content);
+
+                return params;
+            }
+        };
 
         //자동캐싱기능이있음 이전결과가 그대로보여질수도있다.
         request.setShouldCache(false); //이전결과가잇더라도 새로요청해서 결과보여줌
