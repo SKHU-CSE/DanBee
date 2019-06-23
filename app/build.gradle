@@ -41,5 +41,5 @@ dependencies {
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
     implementation 'com.github.mjn1369:prettydialog:1.0.4'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-
+    implementation 'com.romandanylyk:pageindicatorview:0.1.1'
 }
