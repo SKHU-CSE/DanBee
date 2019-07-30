@@ -9,7 +9,7 @@
 수동 킥보드를 전동화 시키고 앱과 통신을 통해서 대여/반납이 가능하고 킥보드에 대한 정보를 확인할 수 있는 공유 플랫폼
 
 ### 앱 영상
-![demo](https://github.com/SKHU-CSE/DanBee/readmeimg/demo.gif)
+![demo](https://github.com/SKHU-CSE/DanBee/readmeimg/danbeeDemo.gif)
 
 ### 사용기술
 - Naver API
