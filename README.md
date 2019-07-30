@@ -11,8 +11,7 @@
 수동 킥보드를 전동화 시키고 앱과 통신을 통해서 대여/반납이 가능하고 킥보드에 대한 정보를 확인할 수 있는 공유 플랫폼
 
 ### 앱 영상
-![demo](https://github.com/SKHU-CSE/DanBee/blob/master/readmeimg/danbeeDemo.gif)
-<img src="/readmeimg/danbeeDemo.gif" width="250" height="350">
+<img src="/readmeimg/danbeeDemo.gif" width="400" height="600">
 <br/>
 
 ### 사용기술
