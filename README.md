@@ -1,5 +1,7 @@
 # 단비
-![danbee](https://github.com/SKHU-CSE/DanBee/readmeimg/danbee.png)
+![danbee](https://github.com/SKHU-CSE/DanBee/blob/master/readmeimg/danbee.png)
+<br/>
+
 ## 전동화 킥보드 공유 서비스
 
 ### 기간 
@@ -9,7 +11,8 @@
 수동 킥보드를 전동화 시키고 앱과 통신을 통해서 대여/반납이 가능하고 킥보드에 대한 정보를 확인할 수 있는 공유 플랫폼
 
 ### 앱 영상
-![demo](https://github.com/SKHU-CSE/DanBee/readmeimg/danbeeDemo.gif)
+![demo](https://github.com/SKHU-CSE/DanBee/blob/master/readmeimg/danbeeDemo.gif)
+<br/>
 
 ### 사용기술
 - Naver API
