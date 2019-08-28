@@ -109,7 +109,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/mypageitem_tv_phone"
+                android:id="@+id/mypageitem_tv_phonetext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -120,7 +120,7 @@
                 android:layout_alignParentLeft="true" />
 
             <TextView
-
+                android:id="@+id/mypageitem_tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -129,7 +129,7 @@
                 android:text="content"
                 android:gravity="right"
                 android:textSize="18dp"
-                android:layout_toRightOf="@id/mypageitem_tv_phone"/>
+                android:layout_toRightOf="@id/mypageitem_tv_phonetext"/>
 
         </RelativeLayout>
 
