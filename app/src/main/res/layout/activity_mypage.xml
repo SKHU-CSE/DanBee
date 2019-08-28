@@ -109,6 +109,7 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/mypageitem_tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -116,19 +117,19 @@
                 android:text="휴대전화번호"
                 android:textStyle="bold"
                 android:textColor="#000000"
-                android:ellipsize="end"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/mypageitem_tv_phone"/>
+                android:layout_alignParentLeft="true" />
 
             <TextView
-                android:id="@+id/mypageitem_tv_phone"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
                 android:text="content"
-                android:textSize="18dp" />
+                android:gravity="right"
+                android:textSize="18dp"
+                android:layout_toRightOf="@id/mypageitem_tv_phone"/>
 
         </RelativeLayout>
 
